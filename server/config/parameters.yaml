@@ -1,0 +1,5 @@
+parameters:
+    string $baseDir: '/var/www/html/'
+    string $composerJson: '/var/www/html/composer.json'
+    string $appSecret: 'PASSPHRASE'
+    string $publicKey: 'PUBLIC_KEY'

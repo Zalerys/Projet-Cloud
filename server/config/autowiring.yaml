@@ -1,0 +1,9 @@
+autowiring:
+    exclude:
+        - './../src/Controllers'
+        - './../src/Entities'
+        - './../src/Factories'
+        - './../src/Helpers'
+        - './../src/Interfaces'
+        - './../src/Managers'
+        - './../src/Types'
