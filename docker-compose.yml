@@ -3,7 +3,7 @@ version: "3.8"
 services:
     frontend:
         build:
-            context: ./client
+            context: ./front
             dockerfile: Dockerfile
         ports:
             - "3000:3000"
