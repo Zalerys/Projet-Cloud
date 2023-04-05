@@ -1,0 +1,39 @@
+version: "3.8"
+
+services:
+    frontend:
+        build:
+            context: ./client
+            dockerfile: Dockerfile
+        ports:
+            - "3000:3000"
+        volumes:
+            - ./front:/project
+        command: npm run start
+
+    backend:
+        build:
+            context: ./server
+            dockerfile: Dockerfile
+        env_file:
+            - ./server/.env
+        restart: always
+        ports:
+            - "3200:80"
+        volumes:
+            - ./server:/var/www/html
+
+    database:
+        image: mariadb:10.8
+        restart: always
+        ports:
+            - "3500:3306"
+        environment:
+            MYSQL_DATABASE: tp-data
+            MYSQL_ROOT_PASSWORD: 4t8MrD5hDRChnq
+        volumes:
+            # Pour lancer un dump automatiquement au montage du conteneur
+            - ./database/dump.sql:/docker-entrypoint-initdb.d/dump.sql
+
+volumes:
+    database:
