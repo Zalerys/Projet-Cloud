@@ -13,7 +13,7 @@ use Exception;
 
 class ServerController extends BaseController
 {
-    #[Route("/servers/{id}", name: "server", methods: [HttpMethods::GET])]
+    #[Route("/servers/{id}", name: "getserver", methods: [HttpMethods::GET])]
     public function serverView(int $id): void
     {
         $server = null;
@@ -28,7 +28,7 @@ class ServerController extends BaseController
         catch (Exception $e) {
             http_response_code(404);
             $this->renderJSON([
-                "message" => "user not found"
+                "message" => "server not found"
             ]);
         }
     }
