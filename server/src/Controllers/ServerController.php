@@ -49,6 +49,33 @@ class ServerController extends BaseController
             ]);
         }
     }
+         #[Route('/server', name: "get_all_server", methods: ["GET"])]
+    public function getAllServer() {
+        $server = new ServerManager(new PDOFactory());
+        $data = $server->getAll();
+        $this->renderJSON($data);
+    }
+
+    #[Route('/server/id/{id}', name: "get_one_server", methods: ["GET"])]
+    public function getOneServer(string $id) {
+        $server = new ServerManager(new PDOFactory());
+        $data = $server->getOne($id);
+        $this->renderJSON($data);
+    }
+
+    #[Route('/server', name: "post_one_server", methods: ["POST"])]
+    public function postOneServer() {
+        $server = new ServerManager(new PDOFactory());
+        $data = $server->postOne();
+        $this->renderJSON($data);
+    }
+
+    #[Route('/server', name: "put_one_server", methods: ["PUT"])]
+    public function putOneServer() {
+        $server = new ServerManager(new PDOFactory());
+        $data = $server->putOne();
+        $this->renderJSON($data);
+    }
 
 
 }
