@@ -6,12 +6,14 @@ import CardDBUser from '../components/CardDBUser/CardDBUser';
 import CardStorage from '../components/CardStorage';
 import CardListBackup from '../components/CardListBackup';
 import Title from '../components/Title';
+import ButtonWhite from '../components/ButtonWhite/ButtonWhite';
+
 export default function ServeurContent() {
   const navigate = useNavigate();
 
   const toLogout = (event: React.MouseEvent<HTMLButtonElement>) => {
     sessionStorage.removeItem('user');
-    navigate('/login');
+    navigate('/authentication');
   };
 
   const toHomePage = (event: React.MouseEvent<HTMLButtonElement>) => {
