@@ -40,7 +40,7 @@ export default function AuthenticationContent() {
         <Input placeholder="Name" required={true}  key="name" onChange={(event) => handleChange(event, "name")}/>
         <Input placeholder="Password"  required={true}  key="password" onChange={(event) => handleChange(event, "password")}/>
         <Input placeholder="Key ssh" onChange={(event) => handleChange(event, "key_ssh")}/>
-        <Button name="Register" onClick={register}/>
+        <Button className={'h-10 px-6 py-2 rounded text-whiteViolet bg-violet'} name="Register" onClick={register}/>
       </form>
       <span className="absolute mb-3 text-sm italic left-5 bottom-24 text-violet">
         Optional
