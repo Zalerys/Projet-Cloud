@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getFetch } from '../controller/getFetch';
-import Button from '../components/ButtonWhite/ButtonWhite';
+import ButtonWhite from '../components/ButtonWhite/ButtonWhite';
 import CardDBUser from '../components/CardDBUser/CardDBUser';
 import CardStorage from '../components/CardStorage';
 import CardListBackup from '../components/CardListBackup';
 import Title from '../components/Title';
-import ButtonWhite from '../components/ButtonWhite/ButtonWhite';
 
 export default function ServeurContent() {
   const navigate = useNavigate();
@@ -30,10 +29,10 @@ export default function ServeurContent() {
     <div className="flex-col">
       <div className="flex justify-between">
         <div className="m-4">
-          <Button onClick={toHomePage} name="Retour" />
+          <ButtonWhite onClick={toHomePage} name="Retour" />
         </div>
         <div className="m-4">
-          <Button onClick={toLogout} name="Déconnexion" />
+          <ButtonWhite onClick={toLogout} name="Déconnexion" />
         </div>
       </div>
       <div className="text-center">

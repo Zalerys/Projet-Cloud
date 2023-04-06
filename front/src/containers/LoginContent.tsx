@@ -7,7 +7,6 @@ import Title from '../components/Title';
 import { postFetch } from '../controller/postFetch';
 
 export default function AuthenticationContent() {
-
   const navigate = useNavigate();
 
   const [err, setErr] = useState<string | null>('');
@@ -28,7 +27,7 @@ export default function AuthenticationContent() {
     if ((await postFetch('/authentication', state)) === false) {
       setErr('Wrong email or password');
     } else {
-      sessionStorage.setItem('user', state.password);
+      sessionStorage.setItem('user', state.name);
       navigate('/homepage');
     }
   }
@@ -38,9 +37,19 @@ export default function AuthenticationContent() {
       <Title name={'Login!'} />
 
       <form className="flex flex-col items-center gap-7" action="post">
-        <Input placeholder="Name" required={true} key="name" onChange={(event) => handleChange(event, "name")}/>
-        <Input placeholder="Password" required={true} key="password" onChange={(event) => handleChange(event, "password")}/>
-        <Button name="Login" onClick={connect}/>
+        <Input
+          placeholder="Name"
+          required={true}
+          key="name"
+          onChange={(event) => handleChange(event, 'name')}
+        />
+        <Input
+          placeholder="Password"
+          required={true}
+          key="password"
+          onChange={(event) => handleChange(event, 'password')}
+        />
+        <Button name="Login" onClick={connect} />
       </form>
     </div>
   );
