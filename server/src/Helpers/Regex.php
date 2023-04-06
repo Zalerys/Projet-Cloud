@@ -38,4 +38,9 @@ class Regex {
     {
         return preg_match('/^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([\/\w .-]*)*\/?$/', $url);
     }
+
+    public static function validatePath(string $path): bool|int
+    {
+        return preg_match('/^(\/[^\/]+){0,2}\/?$/', $path);
+    }
 }

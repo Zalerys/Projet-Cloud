@@ -3,7 +3,10 @@
 namespace App\Entities;
 
 use App\Exceptions\UserException;
+use App\Factories\PDOFactory;
 use App\Helpers\Regex;
+use App\Managers\UserManager;
+use DateTimeImmutable;
 
 class User extends BaseEntity
 {
@@ -11,12 +14,13 @@ class User extends BaseEntity
     private ?string $username = null;
     private ?string $email = null;
     private ?string $hashed_password = null;
-    private ?\DateTimeImmutable $created_at = null;
-    private array $projects = [];
+    private ?string $public_ssh_key = null;
+    private ?DateTimeImmutable $created_at = null;
+    private array $servers = [];
 
     public function __construct(array $data = [])
     {
-        $this->created_at = new \DateTimeImmutable();
+        $this->created_at = new DateTimeImmutable();
 
         parent::__construct($data);
     }
@@ -104,21 +108,50 @@ class User extends BaseEntity
     }
 
     /**
-     * @return \DateTimeImmutable|null
+     * @return DateTimeImmutable|null
      */
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): ?DateTimeImmutable
     {
         return $this->created_at;
     }
 
     /**
-     * @param \DateTimeImmutable|null $created_at
+     * @param DateTimeImmutable|null $created_at
      * @return User
      */
-    public function setCreatedAt(?\DateTimeImmutable $created_at): User
+    public function setCreatedAt(?DateTimeImmutable $created_at): User
     {
         $this->created_at = $created_at;
         return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPublicSshKey(): ?string
+    {
+        return $this->public_ssh_key;
+    }
+
+    /**
+     * @param string|null $public_ssh_key
+     * @return User
+     */
+    public function setPublicSshKey(?string $public_ssh_key): User
+    {
+        $this->public_ssh_key = $public_ssh_key;
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getServers(): array
+    {
+        if (empty($this->servers)) {
+            $this->servers = $this->servers = (new UserManager(new PDOFactory()))->getServersByUser($this);
+        }
+        return $this->servers;
     }
 
     /**

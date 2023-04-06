@@ -10,3 +10,4 @@ export async function getFetch(url: string) {
       console.error(error);
     }
   }
+
