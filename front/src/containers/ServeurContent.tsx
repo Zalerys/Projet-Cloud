@@ -1,11 +1,11 @@
 import { useNavigate } from 'react-router-dom';
-import Button from '../components/ButtonWhite/ButtonWhite';
+import ButtonWhite from '../components/ButtonWhite/ButtonWhite';
 export default function ServeurContent() {
   const navigate = useNavigate();
 
   const toLogout = (event: React.MouseEvent<HTMLButtonElement>) => {
     sessionStorage.removeItem('user');
-    navigate('/login');
+    navigate('/authentication');
   };
 
   const toHomePage = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -14,10 +14,10 @@ export default function ServeurContent() {
   return (
     <div className="flex justify-between">
       <div className="m-4">
-        <Button onClick={toHomePage} name="Retour" />
+        <ButtonWhite onClick={toHomePage} name="Retour" />
       </div>
       <div className="m-4">
-        <Button onClick={toLogout} name="Déconnexion" />
+        <ButtonWhite onClick={toLogout} name="Déconnexion" />
       </div>
     </div>
   );
