@@ -1,7 +1,7 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 
 export default function CheckLog() {
-  if (sessionStorage.getItem("user")) {
+  if (sessionStorage.getItem('user')) {
     return true;
   } else {
     return false;

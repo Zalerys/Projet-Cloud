@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Entities\User;
 use App\Exceptions\UserException;
 use App\Factories\PDOFactory;
 use App\Framework\Entity\BaseController;
@@ -40,6 +41,7 @@ class UserController extends BaseController
             $user = (new UserManager(new PDOFactory()))->findOne($id);
 
             http_response_code(200);
+            //script conso, backup
             $this->renderJSON([
                 "projects" => $user->getProjects(),
             ]);
@@ -50,4 +52,35 @@ class UserController extends BaseController
             ]);
         }
     }
+
+    /**
+     * @throws UserException
+     */
+    #[Route('/users', name: "post_one_user", methods: ["POST"])]
+    public function postOneUser() {
+        $users = new UserManager(new PDOFactory());
+        $user = new User($body);
+        $data = $users->insertOne($user);
+        //scpipt adduser
+        $this->renderJSON($data);
+    }
+
+    #[Route('/users', name: "put_one_user", methods: ["PUT"])]
+    public function putOneUser() {
+        $users = new UserManager(new PDOFactory());
+        $user = new User($body);
+        //ajouter script modify Pwd
+        $data = $users->updateOne($user);
+        $this->renderJSON($data);
+    }
+
+    #[Route('/users/ssh', name: "put_one_user_ssh_key", methods: ["PUT"])]
+    public function addsshKey() {
+        $users = new UserManager(new PDOFactory());
+        $user = new User($body);
+        $data = $users->updateOne($user);
+        //script addssh
+        $this->renderJSON($data);
+    }
+
 }
