@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Entities\Server;
 use App\Exceptions\ServerException;
 use App\Factories\PDOFactory;
 use App\Framework\Entity\BaseController;
@@ -49,24 +50,16 @@ class ServerController extends BaseController
             ]);
         }
     }
-         #[Route('/server', name: "get_all_server", methods: ["GET"])]
-    public function getAllServer() {
-        $server = new ServerManager(new PDOFactory());
-        $data = $server->getAll();
-        $this->renderJSON($data);
-    }
 
-    #[Route('/server/id/{id}', name: "get_one_server", methods: ["GET"])]
-    public function getOneServer(string $id) {
-        $server = new ServerManager(new PDOFactory());
-        $data = $server->getOne($id);
-        $this->renderJSON($data);
-    }
+
 
     #[Route('/server', name: "post_one_server", methods: ["POST"])]
     public function postOneServer() {
-        $server = new ServerManager(new PDOFactory());
-        $data = $server->postOne();
+        $servers = new ServerManager(new PDOFactory());
+        $server = new Server($body);
+        $data = $servers->insertOne($server);
+        //script addServeur
+        //scipt createDB
         $this->renderJSON($data);
     }
 

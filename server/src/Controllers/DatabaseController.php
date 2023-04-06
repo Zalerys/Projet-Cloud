@@ -14,5 +14,7 @@ use Exception;
 class DatabaseController extends BaseController
 {
     #[Route("/database", name: "database", methods: [HttpMethods::GET])]
-    public function database
+    public function database(){
+
+    }
 }

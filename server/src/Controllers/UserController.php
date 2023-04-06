@@ -41,6 +41,7 @@ class UserController extends BaseController
             $user = (new UserManager(new PDOFactory()))->findOne($id);
 
             http_response_code(200);
+            //script conso, backup
             $this->renderJSON([
                 "projects" => $user->getProjects(),
             ]);
