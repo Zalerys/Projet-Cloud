@@ -7,14 +7,13 @@ import Title from '../components/Title';
 import { postFetch } from '../controller/postFetch';
 
 export default function AuthenticationContent() {
-
   const navigate = useNavigate();
-
   const [err, setErr] = useState<string | null>('');
 
   const [state, setState] = useState({
     name: '',
     password: '',
+    key_ssh: '',
   });
 
   const handleChange = (
@@ -24,24 +23,28 @@ export default function AuthenticationContent() {
     setState({ ...state, [key]: event.target.value });
   };
 
-  async function connect() {
+  async function register() {
     if ((await postFetch('/authentication', state)) === false) {
-      setErr('Wrong email or password');
+      setErr('Account already created or invalid');
     } else {
-      sessionStorage.setItem('user', state.password);
+      sessionStorage.setItem('', state.password);
       navigate('/homepage');
     }
   }
 
   return (
     <div className="relative m-auto text-center ">
-      <Title name={'Login!'} />
+      <Title name={'Create your account!'} />
 
       <form className="flex flex-col items-center gap-7" action="post">
-        <Input placeholder="Name" required={true} key="name" onChange={(event) => handleChange(event, "name")}/>
-        <Input placeholder="Password" required={true} key="password" onChange={(event) => handleChange(event, "password")}/>
-        <Button name="Login" onClick={connect}/>
+        <Input placeholder="Name" required={true}  key="name" onChange={(event) => handleChange(event, "name")}/>
+        <Input placeholder="Password"  required={true}  key="password" onChange={(event) => handleChange(event, "password")}/>
+        <Input placeholder="Key ssh" onChange={(event) => handleChange(event, "key_ssh")}/>
+        <Button name="Register" onClick={register}/>
       </form>
+      <span className="absolute mb-3 text-sm italic left-5 bottom-24 text-violet">
+        Optional
+      </span>
     </div>
   );
 }

@@ -6,4 +6,4 @@ export default function CheckLog() {
   } else {
     return false;
   }
-}
+
