@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Entities\User;
 use App\Exceptions\UserException;
 use App\Factories\PDOFactory;
 use App\Framework\Entity\BaseController;
@@ -50,31 +51,34 @@ class UserController extends BaseController
             ]);
         }
     }
-     #[Route('/users', name: "get_all_users", methods: ["GET"])]
-    public function getAllUsers() {
-        $users = new UserManager(new PDOFactory());
-        $data = $users->getAll();
-        $this->renderJSON($data);
-    }
 
-    #[Route('/users/id/{id}', name: "get_one_user", methods: ["GET"])]
-    public function getOneUser(string $id) {
-        $users = new UserManager(new PDOFactory());
-        $data = $users->getOne($id);
-        $this->renderJSON($data);
-    }
-
+    /**
+     * @throws UserException
+     */
     #[Route('/users', name: "post_one_user", methods: ["POST"])]
     public function postOneUser() {
         $users = new UserManager(new PDOFactory());
-        $data = $users->postOne();
+        $user = new User($body);
+        $data = $users->insertOne($user);
+        //scpipt adduser
         $this->renderJSON($data);
     }
 
     #[Route('/users', name: "put_one_user", methods: ["PUT"])]
     public function putOneUser() {
         $users = new UserManager(new PDOFactory());
-        $data = $users->putOne();
+        $user = new User($body);
+        //ajouter script modify Pwd
+        $data = $users->updateOne($user);
+        $this->renderJSON($data);
+    }
+
+    #[Route('/users/ssh', name: "put_one_user_ssh_key", methods: ["PUT"])]
+    public function addsshKey() {
+        $users = new UserManager(new PDOFactory());
+        $user = new User($body);
+        $data = $users->updateOne($user);
+        //script addssh
         $this->renderJSON($data);
     }
 
