@@ -1,5 +1,5 @@
 import React from 'react';
-import './ButtonNavigate.css';
+import './ButtonWhite.css';
 
 interface Props {
   onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
