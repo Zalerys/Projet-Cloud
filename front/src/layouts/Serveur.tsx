@@ -1,3 +1,8 @@
+import ServeurContent from '../containers/ServeurContent';
 export default function Serveur() {
-  return <div></div>;
+  return (
+    <div>
+      <ServeurContent />
+    </div>
+  );
 }
