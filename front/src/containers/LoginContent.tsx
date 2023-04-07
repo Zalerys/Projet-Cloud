@@ -12,7 +12,7 @@ export default function AuthenticationContent() {
   const [err, setErr] = useState<string | null>('');
 
   const [state, setState] = useState({
-    name: '',
+    username: '',
     password: '',
   });
 
@@ -27,7 +27,7 @@ export default function AuthenticationContent() {
     if ((await postFetch('/auth/login', state)) === false) {
       console.log('Wrong email or password');
     } else {
-      sessionStorage.setItem('user', state.name);
+      sessionStorage.setItem('user', state.username);
       navigate('/homepage');
     }
   }
@@ -41,7 +41,7 @@ export default function AuthenticationContent() {
           placeholder="Name"
           required={true}
           key="name"
-          onChange={(event) => handleChange(event, 'name')}
+          onChange={(event) => handleChange(event, 'username')}
         />
         <Input
           placeholder="Password"

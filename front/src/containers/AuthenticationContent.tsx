@@ -26,13 +26,10 @@ export default function AuthenticationContent() {
 
   async function register() {
     if ((await postFetch('/auth/register', state)) === false) {
-      console.log(state);
-      console.log('aled');
-      // setErr('Account already created or invalid');
+      setErr('Account already created or invalid');
     } else {
-      console.log('ca arche mlpzeboufk');
-      // sessionStorage.setItem('user', state.name);
-      // navigate('/homepage');
+      sessionStorage.setItem('user', state.username);
+      navigate('/homepage');
     }
   }
 
