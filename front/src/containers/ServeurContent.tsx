@@ -8,7 +8,6 @@ import CardListBackup from '../components/CardListBackup';
 import Title from '../components/Title';
 import ButtonWhite from '../components/ButtonWhite';
 
-
 export default function ServeurContent() {
   const navigate = useNavigate();
 
