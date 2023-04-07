@@ -55,30 +55,23 @@ class UserController extends BaseController
 
     #[Route('/users', name: "create_user", methods: [HttpMethods::POST])]
     public function createUser() {
-        try {
-            $data = (new UserManager(new PDOFactory()))->insertOne($_POST['user']);
-            //scpipt adduser
-            $this->renderJSON($data);
-        } catch (UserException $e) {
-            http_response_code(400);
-            $this->renderJSON([
-                "message" => $e->getMessage()
-            ]);
-        }
+
+        $data = (new UserManager(new PDOFactory()))->insertOne($_POST['user']);
+        //script adduser
+        shell_exec("sudo ./../scripts/adduser.sh ".$data->getUsername()." ".$data->getHashedPassword());
+        $this->renderJSON($data);
     }
 
     #[Route('/users/{id}', name: "update_user", methods: [HttpMethods::PUT])]
     public function updateUser(int $id) {
+        $user = (new UserManager(new PDOFactory()))->findOne($id);
+        $newUser = new User($id);
+        $user->setPublicSshKey($_POST['publicSshKey']);
         try {
-            $oldUser = (new UserManager(new PDOFactory()))->findOne($id);
-            $newUser = new User($_POST['user']);
-            $finalUserArray = array_merge($oldUser->toArray(), $newUser->toArray());
-
-            $user = new User($finalUserArray);
-
             $data = (new UserManager(new PDOFactory()))->updateOne($user);
-            //script addssh
-            $this->renderJSON($data);
+            //script changement de mot de passe
+            shell_exec("sudo ./../scripts/addsshkey.sh ".$user->getUsername()." ".$_POST['publicSshKey']);
+
         } catch (UserException $e) {
             http_response_code(400);
             $this->renderJSON([
@@ -86,5 +79,4 @@ class UserController extends BaseController
             ]);
         }
     }
-
 }
