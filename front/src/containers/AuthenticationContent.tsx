@@ -11,9 +11,10 @@ export default function AuthenticationContent() {
   const [err, setErr] = useState<string | null>('');
 
   const [state, setState] = useState({
-    name: '',
+    username: '',
+    email: '',
     password: '',
-    key_ssh: '',
+    // key_ssh: '',
   });
 
   const handleChange = (
@@ -24,10 +25,10 @@ export default function AuthenticationContent() {
   };
 
   async function register() {
-    if ((await postFetch('/authentication', state)) === false) {
+    if ((await postFetch('/auth/register', state)) === false) {
       setErr('Account already created or invalid');
     } else {
-      sessionStorage.setItem('', state.password);
+      sessionStorage.setItem('user', state.username);
       navigate('/homepage');
     }
   }
@@ -36,12 +37,35 @@ export default function AuthenticationContent() {
     <div className="relative m-auto text-center ">
       <Title name={'Create your account!'} />
 
-      <form className="flex flex-col items-center gap-7" action="post">
-        <Input placeholder="Name" required={true}  key="name" onChange={(event) => handleChange(event, "name")}/>
-        <Input placeholder="Password"  required={true}  key="password" onChange={(event) => handleChange(event, "password")}/>
-        <Input placeholder="Key ssh" onChange={(event) => handleChange(event, "key_ssh")}/>
-        <Button className={'h-10 px-6 py-2 rounded text-whiteViolet bg-violet'} name="Register" onClick={register}/>
-      </form>
+      <div className="flex flex-col items-center gap-7">
+        <Input
+          placeholder="username"
+          required={true}
+          key="username"
+          onChange={(event) => handleChange(event, 'username')}
+        />
+        <Input
+          placeholder="email"
+          required={true}
+          key="email"
+          onChange={(event) => handleChange(event, 'email')}
+        />
+        <Input
+          placeholder="password"
+          required={true}
+          key="password"
+          onChange={(event) => handleChange(event, 'password')}
+        />
+        {/* <Input
+          placeholder="Key ssh"
+          onChange={(event) => handleChange(event, 'key_ssh')}
+        /> */}
+        <Button
+          className={'h-10 px-6 py-2 rounded text-whiteViolet bg-violet'}
+          name="Register"
+          onClick={register}
+        />
+      </div>
       <span className="absolute mb-3 text-sm italic left-5 bottom-24 text-violet">
         Optional
       </span>

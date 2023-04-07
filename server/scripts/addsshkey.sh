@@ -5,6 +5,6 @@ username="$1"
 echo $username
 
 su username
-sudo nano ~/.ssh/authorized_keys $ssh_ssh_key
+sudo nano ~/.ssh/authorized_keys $ssh_key
 exit
 

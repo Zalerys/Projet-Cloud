@@ -24,7 +24,7 @@ const CardListBackup = () => {
     }
   }
   return (
-    <div className="felx flex-col text-center m-10 bg-whiteViolet rounded-sm border-2 border-violet p-4">
+    <div className="flex-col p-4 m-10 text-center border-2 rounded-sm felx bg-whiteViolet border-violet">
       <div className="mb-4">Password :</div>
       <form className="flex flex-col items-center gap-7" action="post">
         <Input
@@ -39,7 +39,7 @@ const CardListBackup = () => {
           key="password"
           onChange={(event) => handleChange(event, 'newPassword')}
         />
-        <Button name="Login" onClick={connect} />
+        <Button className={'h-10 px-6 py-2 rounded text-whiteViolet bg-violet'} name="Login" onClick={connect} />
       </form>
     </div>
   );

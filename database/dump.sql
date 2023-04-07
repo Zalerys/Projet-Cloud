@@ -20,11 +20,11 @@ create table `Databases`
     created_at timestamp default current_timestamp() not null,
     constraint Databases_Servers_id_fk
         foreign key (server_id) references Servers (id)
-            on update cascade on delete cascade,
-    constraint Databases_Servers_name_fk
-        foreign key (name) references Servers (name)
             on update cascade on delete cascade
 );
+
+create index Databases_Servers_name_fk
+    on `Databases` (name);
 
 create table DatabasesUsers
 (

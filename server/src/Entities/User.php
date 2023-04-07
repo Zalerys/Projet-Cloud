@@ -116,12 +116,22 @@ class User extends BaseEntity
     }
 
     /**
-     * @param DateTimeImmutable|null $created_at
+     * @param DateTimeImmutable|string|null $created_at
      * @return User
+     * @throws UserException
      */
-    public function setCreatedAt(?DateTimeImmutable $created_at): User
+    public function setCreatedAt(DateTimeImmutable|string|null $created_at): User
     {
-        $this->created_at = $created_at;
+        if (!empty($created_at)) {
+            if (is_string($created_at)) {
+                $created_at = new DateTimeImmutable($created_at);
+            } elseif (is_object($created_at)) {
+                $created_at = new DateTimeImmutable($created_at->format('Y-m-d H:i:s'));
+            }
+            $this->created_at = $created_at;
+        } else {
+            throw new UserException('created_at is empty');
+        }
         return $this;
     }
 
@@ -149,27 +159,16 @@ class User extends BaseEntity
     public function getServers(): array
     {
         if (empty($this->servers)) {
-            $this->servers = $this->servers = (new UserManager(new PDOFactory()))->getServersByUser($this);
+            $this->servers = (new UserManager(new PDOFactory()))->findUserServers($this->getId());
         }
         return $this->servers;
     }
 
-    /**
-     * @return Project[]
-     */
-    public function getProjects(): array
-    {
-        if (empty($this->projects)) {
-            $this->projects = $this->getEntityManager()->getProjectManager()->getProjectsByUser($this);
-        }
-        return $this->projects;
-    }
-
     public function toArray(): array
     {
-        $projects = [];
-        foreach ($this->getProjects() as $project) {
-            $projects[] = $project->toArray();
+        $servers = [];
+        foreach ($this->getServers() as $server) {
+            $servers[] = $server->toArray();
         }
 
         return [
@@ -178,7 +177,7 @@ class User extends BaseEntity
             'email' => $this->getEmail(),
             'hashed_password' => $this->getHashedPassword(),
             'created_at' => $this->getCreatedAt()->format('Y-m-d H:i:s'),
-            'projects' => $projects
+            'servers' => $servers
         ];
     }
 }

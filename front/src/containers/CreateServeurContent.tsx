@@ -1,12 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import CardDBUser from '../components/CardDBUser';
-import CardStorage from '../components/CardStorage';
-import CardListBackup from '../components/CardListBackup';
 import Title from '../components/Title';
 import ButtonWhite from '../components/ButtonWhite';
+import CardCreateSite from '../components/CardCreateSite';
 
-export default function ServeurContent() {
+export default function CreateServeurContent() {
   const navigate = useNavigate();
 
   const toLogout = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -18,14 +16,8 @@ export default function ServeurContent() {
     navigate('/homepage');
   };
 
-  // async function getData() {
-  //   var user = sessionStorage.getItem('user');
-  //   const data = await getFetch(`/users/serveur/db/${user}`);
-  //   setState({ ...state, user_id: data.id });
-  // }
-
   return (
-    <div className="flex-col">
+    <div>
       <div className="flex justify-between">
         <div className="m-4">
           <ButtonWhite onClick={toHomePage} name="Retour" />
@@ -35,16 +27,10 @@ export default function ServeurContent() {
         </div>
       </div>
       <div className="text-center">
-        <Title name="Serveur" />
+        <Title name="Create Serveur" />
       </div>
       <div className="flex gap-4">
-        <div className="flex-1 w-90">
-          <CardListBackup />
-        </div>
-        <div>
-          <CardDBUser name="testname" password="testpassword" />
-          <CardStorage />
-        </div>
+        <CardCreateSite />
       </div>
     </div>
   );

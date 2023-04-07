@@ -12,7 +12,7 @@ export default function AuthenticationContent() {
   const [err, setErr] = useState<string | null>('');
 
   const [state, setState] = useState({
-    name: '',
+    username: '',
     password: '',
   });
 
@@ -24,10 +24,10 @@ export default function AuthenticationContent() {
   };
 
   async function connect() {
-    if ((await postFetch('/authentication', state)) === false) {
-      setErr('Wrong email or password');
+    if ((await postFetch('/auth/login', state)) === false) {
+      console.log('Wrong email or password');
     } else {
-      sessionStorage.setItem('user', state.name);
+      sessionStorage.setItem('user', state.username);
       navigate('/homepage');
     }
   }
@@ -36,11 +36,25 @@ export default function AuthenticationContent() {
     <div className="relative m-auto text-center ">
       <Title name={'Login!'} />
 
-      <form className="flex flex-col items-center gap-7" action="post">
-        <Input placeholder="Name" required={true} key="name" onChange={(event) => handleChange(event, "name")}/>
-        <Input placeholder="Password" required={true} key="password" onChange={(event) => handleChange(event, "password")}/>
-        <Button className={'h-10 px-6 py-2 rounded text-whiteViolet bg-violet'} name="Login" onClick={connect}/>
-      </form>
+      <div className="flex flex-col items-center gap-7">
+        <Input
+          placeholder="Name"
+          required={true}
+          key="name"
+          onChange={(event) => handleChange(event, 'username')}
+        />
+        <Input
+          placeholder="Password"
+          required={true}
+          key="password"
+          onChange={(event) => handleChange(event, 'password')}
+        />
+        <Button
+          className={'h-10 px-6 py-2 rounded text-whiteViolet bg-violet'}
+          name="Login"
+          onClick={connect}
+        />
+      </div>
     </div>
   );
 }
