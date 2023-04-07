@@ -3,7 +3,10 @@
 namespace App\Entities;
 
 use App\Exceptions\UserException;
+use App\Factories\PDOFactory;
 use App\Helpers\Regex;
+use App\Managers\UserManager;
+use DateTimeImmutable;
 
 class User extends BaseEntity
 {
@@ -11,12 +14,13 @@ class User extends BaseEntity
     private ?string $username = null;
     private ?string $email = null;
     private ?string $hashed_password = null;
-    private ?\DateTimeImmutable $created_at = null;
-    private array $projects = [];
+    private ?string $public_ssh_key = null;
+    private ?DateTimeImmutable $created_at = null;
+    private array $servers = [];
 
     public function __construct(array $data = [])
     {
-        $this->created_at = new \DateTimeImmutable();
+        $this->created_at = new DateTimeImmutable();
 
         parent::__construct($data);
     }
@@ -104,39 +108,67 @@ class User extends BaseEntity
     }
 
     /**
-     * @return \DateTimeImmutable|null
+     * @return DateTimeImmutable|null
      */
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): ?DateTimeImmutable
     {
         return $this->created_at;
     }
 
     /**
-     * @param \DateTimeImmutable|null $created_at
+     * @param DateTimeImmutable|string|null $created_at
      * @return User
+     * @throws UserException
      */
-    public function setCreatedAt(?\DateTimeImmutable $created_at): User
+    public function setCreatedAt(DateTimeImmutable|string|null $created_at): User
     {
-        $this->created_at = $created_at;
+        if (!empty($created_at)) {
+            if (is_string($created_at)) {
+                $created_at = new DateTimeImmutable($created_at);
+            } elseif (is_object($created_at)) {
+                $created_at = new DateTimeImmutable($created_at->format('Y-m-d H:i:s'));
+            }
+            $this->created_at = $created_at;
+        } else {
+            throw new UserException('created_at is empty');
+        }
         return $this;
     }
 
     /**
-     * @return Project[]
+     * @return string|null
      */
-    public function getProjects(): array
+    public function getPublicSshKey(): ?string
     {
-        if (empty($this->projects)) {
-            $this->projects = $this->getEntityManager()->getProjectManager()->getProjectsByUser($this);
+        return $this->public_ssh_key;
+    }
+
+    /**
+     * @param string|null $public_ssh_key
+     * @return User
+     */
+    public function setPublicSshKey(?string $public_ssh_key): User
+    {
+        $this->public_ssh_key = $public_ssh_key;
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getServers(): array
+    {
+        if (empty($this->servers)) {
+            $this->servers = (new UserManager(new PDOFactory()))->findUserServers($this->getId());
         }
-        return $this->projects;
+        return $this->servers;
     }
 
     public function toArray(): array
     {
-        $projects = [];
-        foreach ($this->getProjects() as $project) {
-            $projects[] = $project->toArray();
+        $servers = [];
+        foreach ($this->getServers() as $server) {
+            $servers[] = $server->toArray();
         }
 
         return [
@@ -145,7 +177,7 @@ class User extends BaseEntity
             'email' => $this->getEmail(),
             'hashed_password' => $this->getHashedPassword(),
             'created_at' => $this->getCreatedAt()->format('Y-m-d H:i:s'),
-            'projects' => $projects
+            'servers' => $servers
         ];
     }
 }

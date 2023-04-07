@@ -2,7 +2,7 @@
 
 namespace App\Managers;
 
-use App\Entities\Project;
+use App\Entities\Server;
 use App\Entities\User;
 use App\Exceptions\UserException;
 use App\Helpers\Regex;
@@ -17,7 +17,7 @@ class UserManager extends BaseManager
     public function findOne(int $id): User
     {
         $db = $this->pdo;
-        $query = "SELECT * FROM users WHERE id = :id";
+        $query = "SELECT * FROM Users WHERE id = :id";
         $statement = $db->prepare($query);
         $statement->bindValue(":id", $id);
         $statement->execute();
@@ -49,7 +49,7 @@ class UserManager extends BaseManager
     public function findOneByEmail(string $email): User
     {
         $db = $this->pdo;
-        $query = "SELECT * FROM users WHERE email = :email";
+        $query = "SELECT * FROM Users WHERE email = :email";
         $statement = $db->prepare($query);
         $statement->bindValue(":email", $email);
         $statement->execute();
@@ -69,7 +69,7 @@ class UserManager extends BaseManager
     public function findOneByUsername(string $username): User
     {
         $db = $this->pdo;
-        $query = "SELECT * FROM users WHERE username = :username";
+        $query = "SELECT * FROM Users WHERE username = :username";
         $statement = $db->prepare($query);
         $statement->bindValue(":username", $username);
         $statement->execute();
@@ -82,13 +82,32 @@ class UserManager extends BaseManager
     }
 
     /**
+     * @param int $userId
+     * @return Server[]
+     */
+    public function findUserServers(int $userId): array
+    {
+        $db = $this->pdo;
+        $query = "SELECT * FROM ServersUsers WHERE user_id = :user_id";
+        $statement = $db->prepare($query);
+        $statement->bindValue(":user_id", $userId);
+        $statement->execute();
+        $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
+        $servers = [];
+        foreach ($data as $server) {
+            $servers[] = new Server($server);
+        }
+        return $servers;
+    }
+
+    /**
      * @param int|null $i
      * @return User[]
      */
     public function findAll(int $i = null): array
     {
         $db = $this->pdo;
-        $query = "SELECT * FROM users ORDER BY id ASC";
+        $query = "SELECT * FROM Users ORDER BY id ASC";
         $statement = $db->prepare($query);
         $statement->execute();
         $users = [];
@@ -116,7 +135,7 @@ class UserManager extends BaseManager
         try {
             $db = $this->pdo;
             $request = $db->prepare("
-            INSERT INTO users (username, email, hashed_password, created_at)
+            INSERT INTO Users (username, email, password, created_at)
             VALUES (?, ?, ?, ?);");
             $request->execute(array(
                 $user->getUsername(),
@@ -145,8 +164,8 @@ class UserManager extends BaseManager
         try {
             $db = $this->pdo;
             $request = $db->prepare("
-            UPDATE users
-            SET username = ?, email = ?, hashed_password = ?
+            UPDATE Users
+            SET username = ?, email = ?, password = ?
             WHERE id = ?;");
 
             $request->execute(array(
@@ -171,7 +190,7 @@ class UserManager extends BaseManager
         try {
             $db = $this->pdo;
             $request = $db->prepare("
-            DELETE FROM users
+            DELETE FROM Users
             WHERE id = ?;");
             $request->execute(array($user->getId()));
         } catch (\Exception $e) {
@@ -179,22 +198,22 @@ class UserManager extends BaseManager
         }
     }
 
-    /**
-     * @param int $id
-     * @return User[]
-     */
-    public function findUserProjects(int $id): array
+    public function addsshKey(User $user): User
     {
-        $db = $this->pdo;
-        $query = "SELECT * FROM projects WHERE id IN (SELECT project_id FROM project_users WHERE user_id = :id)";
-        $statement = $db->prepare($query);
-        $statement->bindValue(":id", $id);
-        $statement->execute();
+        try {
+            $db = $this->pdo;
+            $request = $db->prepare("
+            UPDATE Users
+            SET public_ssh_key = ?
+            WHERE id = ?;");
 
-        $projects = [];
-        while ($data = $statement->fetch(\PDO::FETCH_ASSOC)) {
-            $projects[] = new Project($data);
+            $request->execute(array(
+                $user->getPublicSshKey(),
+                $user->getId()
+            ));
+            return $user;
+        } catch (\Exception $e) {
+            throw new UserException("An error occurred while updating the user");
         }
-        return $projects;
     }
 }
