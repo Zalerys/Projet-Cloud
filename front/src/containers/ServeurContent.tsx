@@ -8,6 +8,7 @@ import CardListBackup from '../components/CardListBackup';
 import Title from '../components/Title';
 import ButtonWhite from '../components/ButtonWhite';
 
+
 export default function ServeurContent() {
   const navigate = useNavigate();
 
@@ -30,10 +31,10 @@ export default function ServeurContent() {
     <div className="flex-col">
       <div className="flex justify-between">
         <div className="m-4">
-          <Button onClick={toHomePage} name="Retour" />
+          <ButtonWhite onClick={toHomePage} name="Retour" />
         </div>
         <div className="m-4">
-          <Button onClick={toLogout} name="Déconnexion" />
+          <ButtonWhite onClick={toLogout} name="Déconnexion" />
         </div>
       </div>
       <div className="text-center">

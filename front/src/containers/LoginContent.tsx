@@ -7,7 +7,6 @@ import Title from '../components/Title';
 import { postFetch } from '../controller/postFetch';
 
 export default function AuthenticationContent() {
-
   const navigate = useNavigate();
 
   const [err, setErr] = useState<string | null>('');
@@ -28,7 +27,7 @@ export default function AuthenticationContent() {
     if ((await postFetch('/authentication', state)) === false) {
       setErr('Wrong email or password');
     } else {
-      sessionStorage.setItem('user', state.password);
+      sessionStorage.setItem('user', state.name);
       navigate('/homepage');
     }
   }
