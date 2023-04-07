@@ -149,27 +149,16 @@ class User extends BaseEntity
     public function getServers(): array
     {
         if (empty($this->servers)) {
-            $this->servers = $this->servers = (new UserManager(new PDOFactory()))->getServersByUser($this);
+            $this->servers = (new UserManager(new PDOFactory()))->findUserServers($this->getId());
         }
         return $this->servers;
     }
 
-    /**
-     * @return Project[]
-     */
-    public function getProjects(): array
-    {
-        if (empty($this->projects)) {
-            $this->projects = $this->getEntityManager()->getProjectManager()->getProjectsByUser($this);
-        }
-        return $this->projects;
-    }
-
     public function toArray(): array
     {
-        $projects = [];
-        foreach ($this->getProjects() as $project) {
-            $projects[] = $project->toArray();
+        $servers = [];
+        foreach ($this->getServers() as $server) {
+            $servers[] = $server->toArray();
         }
 
         return [
@@ -178,7 +167,7 @@ class User extends BaseEntity
             'email' => $this->getEmail(),
             'hashed_password' => $this->getHashedPassword(),
             'created_at' => $this->getCreatedAt()->format('Y-m-d H:i:s'),
-            'projects' => $projects
+            'servers' => $servers
         ];
     }
 }

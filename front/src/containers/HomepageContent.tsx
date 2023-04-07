@@ -1,17 +1,14 @@
 import ButtonWhite from '../components/ButtonWhite';
 import Button from '../components/Button';
-import CardCreateSite from '../components/CardCreateSite';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
 import '../index.css';
 
 export default function HomepageContent() {
   const navigate = useNavigate();
-  const [afficherComposant, setAfficherComposant] = useState(false);
 
-  function handleClick() {
-    setAfficherComposant(true);
-  }
+  const toCreateSite = () => {
+    navigate('/createserver');
+  };
 
   const toLogout = (event: React.MouseEvent<HTMLButtonElement>) => {
     sessionStorage.removeItem('user');
@@ -23,7 +20,7 @@ export default function HomepageContent() {
   };
 
   return (
-    <div className={afficherComposant ? 'backdrop-blur' : ''}>
+    <div>
       <div className="flex justify-between">
         <div className="m-4">
           <ButtonWhite onClick={toProfil} name="Profil" />
@@ -35,10 +32,9 @@ export default function HomepageContent() {
       <div className="mt-10 text-center">
         <Button
           name="Create your server"
-          onClick={handleClick}
+          onClick={toCreateSite}
           className={'h-10 px-6 py-2 rounded text-whiteViolet bg-violet mb-16'}
         />
-        {afficherComposant && <CardCreateSite />}
       </div>
     </div>
   );

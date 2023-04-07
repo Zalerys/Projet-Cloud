@@ -84,6 +84,26 @@ class DatabaseManager extends BaseManager
 
     /**
      * @param Database $database
+     * @return Database
+     * @throws DatabaseException
+     */
+    public function insertOne(Database $database): Database
+    {
+        try {
+            $db = $this->pdo;
+            $query = "INSERT INTO `tp-data`.`Databases` (name, server_id) VALUES (:name, :server_id)";
+            $statement = $db->prepare($query);
+            $statement->bindValue(":name", $database->getName());
+            $statement->bindValue(":server_id", $database->getServerId());
+            $statement->execute();
+        } catch (\PDOException $e) {
+            throw new DatabaseException("Database not found");
+        }
+        return $this->findOne($db->lastInsertId());
+    }
+
+    /**
+     * @param Database $database
      * @throws DatabaseException
      */
     public function updateOne(Database $database): void
