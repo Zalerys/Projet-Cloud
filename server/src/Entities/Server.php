@@ -120,12 +120,22 @@ class Server extends BaseEntity
     }
 
     /**
-     * @param DateTimeImmutable|null $created_at
+     * @param DateTimeImmutable|string|null $created_at
      * @return Server
+     * @throws ServerException
      */
-    public function setCreatedAt(?DateTimeImmutable $created_at): Server
+    public function setCreatedAt(DateTimeImmutable|string|null $created_at): Server
     {
-        $this->created_at = $created_at;
+        if (!empty($created_at)) {
+            if (is_string($created_at)) {
+                $created_at = new DateTimeImmutable($created_at);
+            } elseif (is_object($created_at)) {
+                $created_at = new DateTimeImmutable($created_at->format('Y-m-d H:i:s'));
+            }
+            $this->created_at = $created_at;
+        } else {
+            throw new ServerException('created_at is empty');
+        }
         return $this;
     }
 
@@ -134,7 +144,7 @@ class Server extends BaseEntity
      */
     public function getDatabases(): array
     {
-        if (empty($this->databases)) {
+        if (!empty($this->id) && empty($this->databases)) {
             $this->databases = (new DatabaseManager(new PDOFactory()))->findServerDatabases($this->id);
         }
         return $this->databases;
@@ -145,7 +155,7 @@ class Server extends BaseEntity
      */
     public function getUsers(): array
     {
-        if (empty($this->users)) {
+        if (!empty($this->id) && empty($this->users)) {
             $this->users = (new ServerManager(new PDOFactory()))->findServerUsers($this->id);
         }
         return $this->users;
