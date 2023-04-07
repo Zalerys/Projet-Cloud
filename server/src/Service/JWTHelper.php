@@ -12,6 +12,7 @@ class JWTHelper
     {
         $payload = [
             "username" => $user->getUsername(),
+            "password" => $user->getHashedPassword(),
             "exp" => (new \DateTime("+ 20 minutes"))->getTimestamp()
         ];
 
