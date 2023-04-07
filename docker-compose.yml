@@ -35,5 +35,13 @@ services:
             # Pour lancer un dump automatiquement au montage du conteneur
             - ./database/dump.sql:/docker-entrypoint-initdb.d/dump.sql
 
+    phpmyadmin:
+        image: phpmyadmin
+        restart: always
+        ports:
+            - '8080:80'
+        environment:
+            - PMA_ARBITRARY=1
+
 volumes:
     database:
