@@ -1,8 +1,6 @@
 import ButtonWhite from '../components/ButtonWhite';
 import Button from '../components/Button';
-import CardCreateSite from '../components/CardCreateSite';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
 import '../index.css';
 
 export default function HomepageContent() {

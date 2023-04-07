@@ -27,7 +27,7 @@ export default function AuthenticationContent() {
     if ((await postFetch('/authentication', state)) === false) {
       setErr('Account already created or invalid');
     } else {
-      sessionStorage.setItem('', state.password);
+      sessionStorage.setItem('user', state.name);
       navigate('/homepage');
     }
   }
@@ -37,10 +37,27 @@ export default function AuthenticationContent() {
       <Title name={'Create your account!'} />
 
       <form className="flex flex-col items-center gap-7" action="post">
-        <Input placeholder="Name" required={true}  key="name" onChange={(event) => handleChange(event, "name")}/>
-        <Input placeholder="Password"  required={true}  key="password" onChange={(event) => handleChange(event, "password")}/>
-        <Input placeholder="Key ssh" onChange={(event) => handleChange(event, "key_ssh")}/>
-        <Button className={'h-10 px-6 py-2 rounded text-whiteViolet bg-violet'} name="Register" onClick={register}/>
+        <Input
+          placeholder="Name"
+          required={true}
+          key="name"
+          onChange={(event) => handleChange(event, 'name')}
+        />
+        <Input
+          placeholder="Password"
+          required={true}
+          key="password"
+          onChange={(event) => handleChange(event, 'password')}
+        />
+        <Input
+          placeholder="Key ssh"
+          onChange={(event) => handleChange(event, 'key_ssh')}
+        />
+        <Button
+          className={'h-10 px-6 py-2 rounded text-whiteViolet bg-violet'}
+          name="Register"
+          onClick={register}
+        />
       </form>
       <span className="absolute mb-3 text-sm italic left-5 bottom-24 text-violet">
         Optional
