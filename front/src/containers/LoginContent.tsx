@@ -25,7 +25,7 @@ export default function AuthenticationContent() {
 
   async function connect() {
     if ((await postFetch('/auth/login', state)) === false) {
-      setErr('Wrong email or password');
+      console.log('Wrong email or password');
     } else {
       sessionStorage.setItem('user', state.name);
       navigate('/homepage');
@@ -36,7 +36,7 @@ export default function AuthenticationContent() {
     <div className="relative m-auto text-center ">
       <Title name={'Login!'} />
 
-      <form className="flex flex-col items-center gap-7" action="post">
+      <div className="flex flex-col items-center gap-7">
         <Input
           placeholder="Name"
           required={true}
@@ -54,7 +54,7 @@ export default function AuthenticationContent() {
           name="Login"
           onClick={connect}
         />
-      </form>
+      </div>
     </div>
   );
 }

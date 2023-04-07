@@ -17,12 +17,12 @@ use Exception;
 
 class ServerController extends BaseController
 {
-    #[Route("/servers/{id}", name: "server-details", methods: [HttpMethods::GET])]
-    public function serverView(int $id): void
+    #[Route("/servers/{name}", name: "server-details", methods: [HttpMethods::GET])]
+    public function serverView(int $name): void
     {
         $server = null;
         try {
-            $server = (new ServerManager(new PDOFactory()))->findOne($id);
+            $server = (new ServerManager(new PDOFactory()))->findOne($name);
 
             http_response_code(200);
             $this->renderJSON([
