@@ -1,6 +1,7 @@
 import ButtonWhite from '../components/ButtonWhite';
 import Button from '../components/Button';
 import { useNavigate } from 'react-router-dom';
+import { getFetch } from '../controller/getFetch';
 import '../index.css';
 
 export default function HomepageContent() {
@@ -18,6 +19,10 @@ export default function HomepageContent() {
   const toProfil = (event: React.MouseEvent<HTMLButtonElement>) => {
     navigate('/profil');
   };
+  async function onClickNewExpense(state: any) {
+    var user = sessionStorage.getItem('user');
+    const data = await getFetch(`/servers/list/${user}`);
+  }
 
   return (
     <div>

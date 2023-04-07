@@ -24,7 +24,7 @@ export default function AuthenticationContent() {
   };
 
   async function connect() {
-    if ((await postFetch('/authentication', state)) === false) {
+    if ((await postFetch('/auth/login', state)) === false) {
       setErr('Wrong email or password');
     } else {
       sessionStorage.setItem('user', state.name);
