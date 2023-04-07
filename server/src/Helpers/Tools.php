@@ -2,6 +2,8 @@
 
 namespace App\Helpers;
 
+use App\Entities\User;
+
 class Tools {
     public static function redirect($page): void
     {
@@ -24,5 +26,4 @@ class Tools {
     public static function getClientIP() {
         return filter_input(INPUT_SERVER,'REMOTE_ADDR');
     }
-
 }

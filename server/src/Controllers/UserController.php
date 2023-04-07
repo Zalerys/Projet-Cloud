@@ -33,8 +33,8 @@ class UserController extends BaseController
         }
     }
 
-    #[Route("/users/{id}/projects", name: "user-projects-list", methods: [HttpMethods::GET])]
-    public function userProjectsList(int $id): void
+    #[Route("/users/{id}/servers", name: "user-servers-list", methods: [HttpMethods::GET])]
+    public function userServersList(int $id): void
     {
         $user = null;
         try {
@@ -43,7 +43,7 @@ class UserController extends BaseController
             http_response_code(200);
             //script conso, backup
             $this->renderJSON([
-                "projects" => $user->getProjects(),
+                "servers" => $user->getServers(),
             ]);
         } catch (Exception $e) {
             http_response_code(404);
@@ -55,58 +55,35 @@ class UserController extends BaseController
 
     #[Route('/users', name: "create_user", methods: [HttpMethods::POST])]
     public function createUser() {
-        $data = (new UserManager(new PDOFactory()))->insertOne($_POST['user']);
-        //scpipt adduser
-        $this->renderJSON($data);
-    }
-
-    #[Route('/users/{id}', name: "update_user", methods: [HttpMethods::PUT])]
-    public function updateUser(int $id) {
-        $user = (new UserManager(new PDOFactory()))->findOne($id);
-        $newUser = new User($id);
-        $user->setPublicSshKey($_POST['publicSshKey']);
         try {
-            $data = (new UserManager(new PDOFactory()))->updateOne($user);
+            $data = (new UserManager(new PDOFactory()))->insertOne($_POST['user']);
+            //scpipt adduser
+            $this->renderJSON($data);
         } catch (UserException $e) {
             http_response_code(400);
             $this->renderJSON([
                 "message" => $e->getMessage()
             ]);
         }
-        //script addssh
-        $this->renderJSON($data);
     }
 
-    #[Route("/users/{id}/edit", name: "user-edit", methods: [HttpMethods::PUT])]
-    public function userEdit(int $id)
-    {
-        if (!$this->getUser()) {
-            Tools::redirect("/login");
-        }
-
-        $user = null;
+    #[Route('/users/{id}', name: "update_user", methods: [HttpMethods::PUT])]
+    public function updateUser(int $id) {
         try {
-            $user = (new UserManager(new PDOFactory()))->findOne($id);
-        } catch (Exception $e) {
-            $_SESSION['error'] = "User not found";
-            Tools::redirect("/");
-        }
+            $oldUser = (new UserManager(new PDOFactory()))->findOne($id);
+            $newUser = new User($_POST['user']);
+            $finalUserArray = array_merge($oldUser->toArray(), $newUser->toArray());
 
-        $user->setFirstname($_POST['firstname']);
-        $user->setLastname($_POST['lastname']);
-        $user->setBio($_POST['bio']);
-        $user->setPhone($_POST['phone']);
-        $user->setDateOfBirth($_POST['date_of_birth']);
-        $user->setAvatarUrl($_POST['avatar_url']);
-        $user->setUpdatedAt(date('Y-m-d H:i:s'));
+            $user = new User($finalUserArray);
 
-        try {
-            (new UserManager(new PDOFactory()))->updateOne($user);
-            $_SESSION['success'] = "User updated";
-            Tools::redirect("/");
+            $data = (new UserManager(new PDOFactory()))->updateOne($user);
+            //script addssh
+            $this->renderJSON($data);
         } catch (UserException $e) {
-            $_SESSION['error'] = $e->getMessage();
-            Tools::redirect("/users/{$user->getId()}/edit");
+            http_response_code(400);
+            $this->renderJSON([
+                "message" => $e->getMessage()
+            ]);
         }
     }
 
