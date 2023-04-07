@@ -53,34 +53,61 @@ class UserController extends BaseController
         }
     }
 
-    /**
-     * @throws UserException
-     */
-    #[Route('/users', name: "post_one_user", methods: ["POST"])]
-    public function postOneUser() {
-        $users = new UserManager(new PDOFactory());
-        $user = new User($body);
-        $data = $users->insertOne($user);
+    #[Route('/users', name: "create_user", methods: [HttpMethods::POST])]
+    public function createUser() {
+        $data = (new UserManager(new PDOFactory()))->insertOne($_POST['user']);
         //scpipt adduser
         $this->renderJSON($data);
     }
 
-    #[Route('/users', name: "put_one_user", methods: ["PUT"])]
-    public function putOneUser() {
-        $users = new UserManager(new PDOFactory());
-        $user = new User($body);
-        //ajouter script modify Pwd
-        $data = $users->updateOne($user);
+    #[Route('/users/{id}', name: "update_user", methods: [HttpMethods::PUT])]
+    public function updateUser(int $id) {
+        $user = (new UserManager(new PDOFactory()))->findOne($id);
+        $newUser = new User($id);
+        $user->setPublicSshKey($_POST['publicSshKey']);
+        try {
+            $data = (new UserManager(new PDOFactory()))->updateOne($user);
+        } catch (UserException $e) {
+            http_response_code(400);
+            $this->renderJSON([
+                "message" => $e->getMessage()
+            ]);
+        }
+        //script addssh
         $this->renderJSON($data);
     }
 
-    #[Route('/users/ssh', name: "put_one_user_ssh_key", methods: ["PUT"])]
-    public function addsshKey() {
-        $users = new UserManager(new PDOFactory());
-        $user = new User($body);
-        $data = $users->updateOne($user);
-        //script addssh
-        $this->renderJSON($data);
+    #[Route("/users/{id}/edit", name: "user-edit", methods: [HttpMethods::PUT])]
+    public function userEdit(int $id)
+    {
+        if (!$this->getUser()) {
+            Tools::redirect("/login");
+        }
+
+        $user = null;
+        try {
+            $user = (new UserManager(new PDOFactory()))->findOne($id);
+        } catch (Exception $e) {
+            $_SESSION['error'] = "User not found";
+            Tools::redirect("/");
+        }
+
+        $user->setFirstname($_POST['firstname']);
+        $user->setLastname($_POST['lastname']);
+        $user->setBio($_POST['bio']);
+        $user->setPhone($_POST['phone']);
+        $user->setDateOfBirth($_POST['date_of_birth']);
+        $user->setAvatarUrl($_POST['avatar_url']);
+        $user->setUpdatedAt(date('Y-m-d H:i:s'));
+
+        try {
+            (new UserManager(new PDOFactory()))->updateOne($user);
+            $_SESSION['success'] = "User updated";
+            Tools::redirect("/");
+        } catch (UserException $e) {
+            $_SESSION['error'] = $e->getMessage();
+            Tools::redirect("/users/{$user->getId()}/edit");
+        }
     }
 
 }
