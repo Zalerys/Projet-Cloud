@@ -1,9 +1,9 @@
-import ButtonWhite from '../components/ButtonWhite/ButtonWhite';
+import ButtonWhite from '../components/ButtonWhite';
 import Button from '../components/Button';
-import CardCreateSite from '../components/cardCreateSite';
+import CardCreateSite from '../components/CardCreateSite';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import '../index.css'
+import '../index.css';
 
 export default function HomepageContent() {
   const navigate = useNavigate();

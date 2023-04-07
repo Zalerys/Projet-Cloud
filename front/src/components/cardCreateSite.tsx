@@ -1,10 +1,10 @@
 import React from 'react';
 import { useState } from 'react';
 import Title from './Title';
-import Input from '../components/Input';
+import Input from './Input';
 import { postFetch } from '../controller/postFetch';
 import { useNavigate } from 'react-router-dom';
-import Button from '../components/Button';
+import Button from './Button';
 
 const CardCreateSite = () => {
   const [err, setErr] = useState<string | null>('');
@@ -14,6 +14,7 @@ const CardCreateSite = () => {
     name: '',
     key_ssh: '',
   });
+  const [file, setFile] = useState<File | null>(null);
 
   const handleChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -30,23 +31,56 @@ const CardCreateSite = () => {
       navigate('/homepage');
     }
   }
+  const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    const droppedFile = event.dataTransfer.files[0];
+    setFile(droppedFile);
+  };
+
+  const handleDownload = () => {
+    if (!file) {
+      return;
+    }
+    const downloadLink = URL.createObjectURL(file);
+    const a = document.createElement('a');
+    a.href = downloadLink;
+    a.download = 'downloaded.html';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  };
 
   return (
     <div className="relative z-50 max-w-sm px-12 py-6 m-auto text-center bg-white border-2 rounded-sm border-violet">
       <Title name="Fill your information" />
-      <form className='flex flex-col items-center gap-10' action="post">
+      <form className="flex flex-col items-center gap-10" action="post">
         <Input
-          placeholder="Name"
+          placeholder="Nom du serveur"
           required={true}
           key="name"
           onChange={(event) => handleChange(event, 'name')}
         />
-        <Button type="file" name='+'className={'h-10 w-40 px-6 py-2 rounded bg-grey text-violet'}/>
-        <Button name='To validate' className={'h-10 w-40 px-6 py-2 rounded bg-violet text-whiteViolet'}/>
+        <div onDrop={handleDrop} onDragOver={(event) => event.preventDefault()}>
+          {file ? (
+            <Button
+              type="file"
+              onClick={handleDownload}
+              name="Download fini"
+              className={'h-10 w-40 px-6 py-2 rounded bg-grey text-violet'}
+            />
+          ) : (
+            <Button
+              type="file"
+              name="+"
+              className={'h-10 w-40 px-6 py-2 rounded bg-grey text-violet'}
+            />
+          )}
+        </div>
+        <Button
+          name="To validate"
+          className={'h-10 w-40 px-6 py-2 rounded bg-violet text-whiteViolet'}
+        />
       </form>
-      <span className="absolute mb-3 text-sm italic top-32 left-28 text-violet">
-          Drop your website
-        </span>
     </div>
   );
 };

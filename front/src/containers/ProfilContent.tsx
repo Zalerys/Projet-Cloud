@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import ButtonWhite from '../components/ButtonWhite/ButtonWhite';
+import ButtonWhite from '../components/ButtonWhite';
 export default function ProfilContent() {
   const navigate = useNavigate();
 
