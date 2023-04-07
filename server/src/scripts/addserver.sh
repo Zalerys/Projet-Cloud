@@ -10,7 +10,15 @@ sudo  mkdir /var/www/html/$username/$servername
 
 #Création du fichier config
 
-template="
+
+nginx_config="/etc/nginx/sites-enabled/$servername"
+
+sudo touch $nginx_config
+
+echo $servername
+echo $nginx_config
+
+sudo cat > "$nginx_config" << EOF
 server {
         listen 80;
         listen [::]:80;
@@ -18,7 +26,7 @@ server {
         server_name www.$servername.fr;
 
         root /var/www/html/$username/$servername;
-        index index.html index.php
+        index index.html index.php;
 
         location / {
                 try_files $uri $uri/ =404;
@@ -32,4 +40,9 @@ server {
                 return 404;
         }
 }
+EOF
+
+sudo systemctl reload nginx
+#ecrire dans le nouveau fichier
+#echo "$template" | sudo nano /etc/nginx/sites-enabled/$server_name
 
