@@ -23,7 +23,7 @@ const CardCreateSite = () => {
     setState({ ...state, [key]: event.target.value });
   };
 
-  async function register() {
+  async function createserver() {
     if ((await postFetch('/authentication', state)) === false) {
       setErr('Account already created or invalid');
     } else {
@@ -77,6 +77,7 @@ const CardCreateSite = () => {
           )}
         </div>
         <Button
+          onClick={createserver}
           name="To validate"
           className={'h-10 w-40 px-6 py-2 rounded bg-violet text-whiteViolet'}
         />
