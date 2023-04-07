@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getFetch } from '../controller/getFetch';
 import Title from '../components/Title';
 import ButtonWhite from '../components/ButtonWhite';
 import CardCreateSite from '../components/CardCreateSite';

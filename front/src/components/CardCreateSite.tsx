@@ -7,12 +7,11 @@ import { useNavigate } from 'react-router-dom';
 import Button from './Button';
 
 const CardCreateSite = () => {
-  const [err, setErr] = useState<string | null>('');
   const navigate = useNavigate();
 
   const [state, setState] = useState({
     name: '',
-    key_ssh: '',
+    html: '',
   });
   const [file, setFile] = useState<File | null>(null);
 
@@ -24,10 +23,9 @@ const CardCreateSite = () => {
   };
 
   async function createserver() {
-    if ((await postFetch('/authentication', state)) === false) {
-      setErr('Account already created or invalid');
+    if ((await postFetch('/servers', state)) === false) {
+      console.log('erreur creation server');
     } else {
-      sessionStorage.setItem('', state.name);
       navigate('/homepage');
     }
   }
