@@ -2,6 +2,7 @@
 
 namespace App\Entities;
 
+use App\Exceptions\DatabaseException;
 use App\Factories\PDOFactory;
 use App\Managers\DatabaseManager;
 use DateTimeImmutable;
@@ -84,12 +85,22 @@ class Database extends BaseEntity
     }
 
     /**
-     * @param DateTimeImmutable|null $created_at
+     * @param DateTimeImmutable|string|null $created_at
      * @return Database
+     * @throws DatabaseException
      */
-    public function setCreatedAt(?DateTimeImmutable $created_at): Database
+    public function setCreatedAt(DateTimeImmutable|string|null $created_at): Database
     {
-        $this->created_at = $created_at;
+        if (!empty($created_at)) {
+            if (is_string($created_at)) {
+                $created_at = new DateTimeImmutable($created_at);
+            } elseif (is_object($created_at)) {
+                $created_at = new DateTimeImmutable($created_at->format('Y-m-d H:i:s'));
+            }
+            $this->created_at = $created_at;
+        } else {
+            throw new DatabaseException('created_at is empty');
+        }
         return $this;
     }
 
@@ -102,6 +113,17 @@ class Database extends BaseEntity
             $this->db_users = (new DatabaseManager(new PDOFactory()))->findDatabaseUsers($this->id);
         }
         return $this->db_users;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'server_id' => $this->server_id,
+            'created_at' => $this->created_at->format('Y-m-d H:i:s'),
+            'db_users' => array_map(fn(DatabaseUser $db_user) => $db_user->toArray(), $this->db_users),
+        ];
     }
 
 }

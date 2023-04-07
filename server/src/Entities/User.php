@@ -116,12 +116,22 @@ class User extends BaseEntity
     }
 
     /**
-     * @param DateTimeImmutable|null $created_at
+     * @param DateTimeImmutable|string|null $created_at
      * @return User
+     * @throws UserException
      */
-    public function setCreatedAt(?DateTimeImmutable $created_at): User
+    public function setCreatedAt(DateTimeImmutable|string|null $created_at): User
     {
-        $this->created_at = $created_at;
+        if (!empty($created_at)) {
+            if (is_string($created_at)) {
+                $created_at = new DateTimeImmutable($created_at);
+            } elseif (is_object($created_at)) {
+                $created_at = new DateTimeImmutable($created_at->format('Y-m-d H:i:s'));
+            }
+            $this->created_at = $created_at;
+        } else {
+            throw new UserException('created_at is empty');
+        }
         return $this;
     }
 
