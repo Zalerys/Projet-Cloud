@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getFetch } from '../controller/getFetch';
-import ButtonWhite from '../components/ButtonWhite/ButtonWhite';
-import CardDBUser from '../components/CardDBUser/CardDBUser';
+import Button from '../components/ButtonWhite';
+import CardDBUser from '../components/CardDBUser';
 import CardStorage from '../components/CardStorage';
 import CardListBackup from '../components/CardListBackup';
 import Title from '../components/Title';
+import ButtonWhite from '../components/ButtonWhite';
+
 
 export default function ServeurContent() {
   const navigate = useNavigate();
@@ -38,7 +40,7 @@ export default function ServeurContent() {
       <div className="text-center">
         <Title name="Serveur" />
       </div>
-      <div className="flex  gap-4">
+      <div className="flex gap-4">
         <div className="flex-1 w-90">
           <CardListBackup />
         </div>

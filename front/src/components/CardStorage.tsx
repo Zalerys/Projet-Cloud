@@ -16,17 +16,17 @@ const CardStorage = ({ storageDB = '', storageFolder = '', serveur = '' }) => {
     }
   }
   return (
-    <div className="felx flex-col text-center m-10 bg-whiteViolet rounded-sm border-2 border-violet p-4">
+    <div className="flex-col p-4 m-10 text-center border-2 rounded-sm felx bg-whiteViolet border-violet">
       <div className="mb-6">Stocakge :</div>
 
-      <div className="flex row mb-4 space-x-3">
+      <div className="flex mb-4 space-x-3 row">
         <p className="basis-2/4">Stockage Serveur :</p>
       </div>
-      <div className="flex row mb-4 space-x-3">
+      <div className="flex mb-4 space-x-3 row">
         <p className="basis-2/4">Stockage DB :</p>
       </div>
       <div className="flex justify-end">
-        <Button name="Login" onClick={loadBackup} />
+        <Button className={'h-10 px-6 py-2 rounded text-whiteViolet bg-violet'} name="Login" onClick={loadBackup} />
       </div>
     </div>
   );

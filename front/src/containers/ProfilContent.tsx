@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import ButtonWhite from '../components/ButtonWhite/ButtonWhite';
+import ButtonWhite from '../components/ButtonWhite';
 import Title from '../components/Title';
 import CardUpdatePassword from '../components/CardUpdatePassword';
 import CardSsh from '../components/CardSsh';

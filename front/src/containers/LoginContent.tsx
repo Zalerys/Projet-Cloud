@@ -37,19 +37,9 @@ export default function AuthenticationContent() {
       <Title name={'Login!'} />
 
       <form className="flex flex-col items-center gap-7" action="post">
-        <Input
-          placeholder="Name"
-          required={true}
-          key="name"
-          onChange={(event) => handleChange(event, 'name')}
-        />
-        <Input
-          placeholder="Password"
-          required={true}
-          key="password"
-          onChange={(event) => handleChange(event, 'password')}
-        />
-        <Button name="Login" onClick={connect} />
+        <Input placeholder="Name" required={true} key="name" onChange={(event) => handleChange(event, "name")}/>
+        <Input placeholder="Password" required={true} key="password" onChange={(event) => handleChange(event, "password")}/>
+        <Button className={'h-10 px-6 py-2 rounded text-whiteViolet bg-violet'} name="Login" onClick={connect}/>
       </form>
     </div>
   );
