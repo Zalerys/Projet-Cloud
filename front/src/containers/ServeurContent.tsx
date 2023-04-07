@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getFetch } from '../controller/getFetch';
-import Button from '../components/ButtonWhite';
 import CardDBUser from '../components/CardDBUser';
 import CardStorage from '../components/CardStorage';
 import CardListBackup from '../components/CardListBackup';
