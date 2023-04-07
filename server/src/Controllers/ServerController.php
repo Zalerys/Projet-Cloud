@@ -14,7 +14,7 @@ use Exception;
 
 class ServerController extends BaseController
 {
-    #[Route("/servers/{id}", name: "getserver", methods: [HttpMethods::GET])]
+    #[Route("/servers/{id}", name: "server-details", methods: [HttpMethods::GET])]
     public function serverView(int $id): void
     {
         $server = null;
@@ -33,42 +33,47 @@ class ServerController extends BaseController
             ]);
         }
     }
-    #[Route("/server/{id}", name: "server-list", methods: [HttpMethods::GET])]
-    public function serverProjectsList(int $id): void
-    {
-        $server = null;
+
+    #[Route('/servers', name: "create_server", methods: [HttpMethods::POST])]
+    public function createServer() {
         try {
-            $server = (new ServerManager(new PDOFactory()))->findOne($id);
-            http_response_code(200);
+            $server = (new ServerManager(new PDOFactory()))->insertOne(new Server($_POST));
+
+            //script addServeur
+            //script createDB
+
+            $data = [
+                "message" => "server created",
+                "server" => $server->toArray()
+            ];
+            $this->renderJSON($data);
+        } catch (ServerException $e) {
+            http_response_code(400);
             $this->renderJSON([
-                "projects" => $server->getProjects(),
-            ]);
-        } catch (Exception $e) {
-            http_response_code(404);
-            $this->renderJSON([
-                "message" => "server not found"
+                "message" => $e->getMessage()
             ]);
         }
     }
 
+    #[Route('/servers/{id}', name: "delete_server", methods: [HttpMethods::DELETE])]
+    public function deleteServer(int $id) {
+        try {
+            // user verification
 
+            (new ServerManager(new PDOFactory()))->deleteOne($id);
 
-    #[Route('/server', name: "post_one_server", methods: ["POST"])]
-    public function postOneServer() {
-        $servers = new ServerManager(new PDOFactory());
-        $server = new Server($body);
-        $data = $servers->insertOne($server);
-        //script addServeur
-        //scipt createDB
-        $this->renderJSON($data);
+            //script deleteServeur
+            //script deleteDB
+
+            $data = [
+                "message" => "server deleted",
+            ];
+            $this->renderJSON($data);
+        } catch (ServerException $e) {
+            http_response_code(500);
+            $this->renderJSON([
+                "message" => $e->getMessage()
+            ]);
+        }
     }
-
-    #[Route('/server', name: "put_one_server", methods: ["PUT"])]
-    public function putOneServer() {
-        $server = new ServerManager(new PDOFactory());
-        $data = $server->putOne();
-        $this->renderJSON($data);
-    }
-
-
 }
