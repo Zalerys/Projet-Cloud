@@ -197,4 +197,23 @@ class UserManager extends BaseManager
             throw new UserException("An error occurred while deleting the user");
         }
     }
+
+    public function addsshKey(User $user): User
+    {
+        try {
+            $db = $this->pdo;
+            $request = $db->prepare("
+            UPDATE Users
+            SET public_ssh_key = ?
+            WHERE id = ?;");
+
+            $request->execute(array(
+                $user->getPublicSshKey(),
+                $user->getId()
+            ));
+            return $user;
+        } catch (\Exception $e) {
+            throw new UserException("An error occurred while updating the user");
+        }
+    }
 }
