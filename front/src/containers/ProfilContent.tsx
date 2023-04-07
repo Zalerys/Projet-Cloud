@@ -1,23 +1,36 @@
 import { useNavigate } from 'react-router-dom';
-import Button from '../components/ButtonWhite/ButtonWhite';
+import ButtonWhite from '../components/ButtonWhite';
+import Title from '../components/Title';
+import CardUpdatePassword from '../components/CardUpdatePassword';
+import CardSsh from '../components/CardSsh';
+
 export default function ProfilContent() {
   const navigate = useNavigate();
 
   const toLogout = (event: React.MouseEvent<HTMLButtonElement>) => {
     sessionStorage.removeItem('user');
-    navigate('/login');
+    navigate('/authentication');
   };
 
   const toHomePage = (event: React.MouseEvent<HTMLButtonElement>) => {
     navigate('/homepage');
   };
   return (
-    <div className="flex justify-between">
-      <div className="m-4">
-        <Button onClick={toHomePage} name="Retour" />
+    <div className="flex-col justify-between">
+      <div className="flex justify-between m-4">
+        <ButtonWhite onClick={toHomePage} name="Retour" />
+        <ButtonWhite onClick={toLogout} name="Déconnexion" />
       </div>
-      <div className="m-4">
-        <Button onClick={toLogout} name="Déconnexion" />
+      <div className="text-center">
+        <Title name="Profil" />
+      </div>
+      <div className="flex ">
+        <div className="flex-1">
+          <CardSsh />
+        </div>
+        <div className="flex-1 ">
+          <CardUpdatePassword />
+        </div>
       </div>
     </div>
   );
