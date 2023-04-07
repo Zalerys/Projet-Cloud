@@ -1,6 +1,11 @@
 #!/bin/bash
+set -e
 
-server_name="$4"
 username="$1"
+server_name="$2"
 
-du -sh /var/www/html/$username/$server_name
+datasize="du -sh /var/www/html/$username/$server_name"
+
+echo "$datasize"
+
+

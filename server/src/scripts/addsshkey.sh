@@ -1,6 +1,6 @@
 #!bin/bash
 
-ssh_key="$3"
+ssh_key="$2"
 username="$1"
 echo $username
 

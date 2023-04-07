@@ -1,6 +1,6 @@
 #!/bin/bash
 
-server_name="$4"
 username="$1"
+dbname="$2"
 
 du -sh /var/www/html/$username/$dbname

@@ -56,7 +56,8 @@ class UserController extends BaseController
     #[Route('/users', name: "create_user", methods: [HttpMethods::POST])]
     public function createUser() {
         $data = (new UserManager(new PDOFactory()))->insertOne($_POST['user']);
-        //scpipt adduser
+        //script adduser
+        shell_exec("sudo ./../scripts/adduser.sh ".$data->getUsername()." ".$data->getHashedPassword());
         $this->renderJSON($data);
     }
 
@@ -67,6 +68,8 @@ class UserController extends BaseController
         $user->setPublicSshKey($_POST['publicSshKey']);
         try {
             $data = (new UserManager(new PDOFactory()))->updateOne($user);
+            //script changement de mot de passe
+            shell_exec("sudo ./../scripts/addsshkey.sh ".$user->getUsername()." ".$_POST['publicSshKey']);
         } catch (UserException $e) {
             http_response_code(400);
             $this->renderJSON([
