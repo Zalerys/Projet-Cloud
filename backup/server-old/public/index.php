@@ -11,10 +11,16 @@ session_start();
 require_once dirname(__DIR__) . "/vendor/autoload.php";
 
 try {
+    var_dump(dirname(__FILE__, 2) . "/src");
+var_dump(dirname(__FILE__, 2) . "/config/parameters.yaml");
+
     (new DIC())
         ->injectParameters(dirname(__FILE__, 2) . '/config/parameters.yaml')
         ->run(dirname(__FILE__, 2) . "/src");
 } catch (ReflectionException $e) {
+    echo '<br><br><pre>';
+    var_dump($e);
+    echo '</pre><br/><br>';
     echo 'DIC Error: ' . $e->getMessage();
 }
 

@@ -105,7 +105,7 @@ class DIC implements ContainerInterface
                     // If it's a builtin parameter, it should have been manually injected
                     // to be able to have a unique identifier in the container, the name of a
                     // manually injected parameter is <varType><$varName>
-                    if (!$parameter->getType()->isBuiltin()) {
+                    if ($parameter->getType() && !$parameter->getType()->isBuiltin()) {
                         $constructorDependencies[] = $this->get($parameter->getType()->getName());
                     } else {
                         // TODO - c'est un fix pas dingue pour l'instant...
