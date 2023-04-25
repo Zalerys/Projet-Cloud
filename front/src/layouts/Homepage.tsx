@@ -13,9 +13,9 @@ export default function Homepage() {
     }
   });
   return (
-    <div className="mx-16">
+    <div className="sm:mx-16">
       <HomepageContent />
-      <div className="grid grid-cols-3 gap-10 mx-16 my-12">
+      <div className="grid gap-10 mx-16 my-12 md:grid-cols-2 lg:grid-cols-3">
         <Card />
         <Card />
         <Card />
