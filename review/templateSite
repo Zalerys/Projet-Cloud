@@ -1,0 +1,27 @@
+server {
+	listen 80;
+	listen [::]:80;
+
+	root /home/MYUSERNAME/www/public_html;
+
+	server_name _;
+
+	location / {
+		try_files $uri $uri/ =404;
+	}
+
+    access_log /home/MYUSERNAME/www/logs/access.log;
+    error_log /home/MYUSERNAME/www/logs/error.log;
+
+    location ~* ^.+\.(jpg|jpeg|gif|css|png|js|ico|html|xml|txt)$ {
+        access_log off;
+        log_not_found off;
+        expires max;
+    }
+
+    location ~ \.php$ {
+        include snippets/fastcgi-php.conf;
+        fastcgi_pass unix:/run/php/php7.4-fpm.sock;
+    }
+
+}
