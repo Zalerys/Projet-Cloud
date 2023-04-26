@@ -24,7 +24,7 @@ export default function ProfilContent() {
       <div className="text-center">
         <Title name="Profil" />
       </div>
-      <div className="flex ">
+      <div className="flex flex-col md:flex-row">
         <div className="flex-1">
           <CardSsh />
         </div>

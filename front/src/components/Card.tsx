@@ -57,7 +57,7 @@ export default function Card() {
           )}
           <div className="text-center">
             <Button
-              className={'h-10 px-6 py-2 rounded text-whiteViolet bg-violet'}
+              className={'h-14 px-6 py-2 rounded text-whiteViolet bg-violet'}
               name="Access to Database"
               onClick={toServer}
             />
