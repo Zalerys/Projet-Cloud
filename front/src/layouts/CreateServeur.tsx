@@ -12,7 +12,7 @@ export default function CreateServeur() {
     }
   });
   return (
-    <div className="mx-16">
+    <div className="sm:mx-16">
       <CreateServeurContent />
     </div>
   );

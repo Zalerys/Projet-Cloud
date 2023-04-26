@@ -33,7 +33,7 @@ export default function AuthenticationContent() {
   }
 
   return (
-    <div className="relative m-auto text-center ">
+    <div className="relative m-auto text-center h-72 ">
       <Title name={'Login!'} />
 
       <div className="flex flex-col items-center gap-7">

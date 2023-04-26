@@ -26,7 +26,7 @@ const CardSsh = () => {
   }
   return (
     <div className="flex-col p-4 m-10 text-center border-2 rounded-sm felx bg-whiteViolet border-violet">
-      <div className="mb-4">Password :</div>
+      <div className="mb-4">Ssh :</div>
       <form className="flex flex-col items-center gap-7" action="post">
         <Input
           placeholder="Ssh"

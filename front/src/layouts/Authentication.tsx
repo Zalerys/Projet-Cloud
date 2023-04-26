@@ -4,7 +4,7 @@ import BackgroundStyle from '../components/BackgroundStyle';
 
 export default function Register() {
   return (
-    <div className="relative flex h-screen">
+    <div className="relative flex flex-col h-screen sm:flex-row">
       <BackgroundStyle/>
       <AuthenticationContent />
       <LoginContent />
