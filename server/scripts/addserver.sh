@@ -25,7 +25,7 @@ server {
 
         server_name www.$servername.fr;
 
-        root /var/www/html/$username/$servername;
+        root /home/$username/$servername;
         index index.html index.php;
 
         location / {
