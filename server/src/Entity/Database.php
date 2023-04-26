@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: DatabaseRepository::class)]
+#[ORM\Table(name: 'program_db')]
 class Database
 {
     #[ORM\Id]
@@ -18,14 +19,14 @@ class Database
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\ManyToOne(inversedBy: 'databases')]
+    #[ORM\ManyToOne(inversedBy: 'dbs')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Server $server = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $created_at = null;
 
-    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'databases')]
+    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'affectedDatabases')]
     private Collection $users;
 
     public function __construct()
@@ -86,6 +87,7 @@ class Database
     {
         if (!$this->users->contains($user)) {
             $this->users->add($user);
+            $user->addAffectedDatabase($this);
         }
 
         return $this;
@@ -93,7 +95,9 @@ class Database
 
     public function removeUser(User $user): self
     {
-        $this->users->removeElement($user);
+        if ($this->users->removeElement($user)) {
+            $user->removeAffectedDatabase($this);
+        }
 
         return $this;
     }

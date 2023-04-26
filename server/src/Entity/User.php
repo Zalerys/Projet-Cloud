@@ -8,7 +8,6 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[ORM\Table(name: '`user`')]
 class User
 {
     #[ORM\Id]
@@ -31,16 +30,16 @@ class User
     #[ORM\Column]
     private ?\DateTimeImmutable $created_at = null;
 
-    #[ORM\ManyToMany(targetEntity: Server::class, mappedBy: 'users')]
+    #[ORM\ManyToMany(targetEntity: Server::class, inversedBy: 'users')]
     private Collection $servers;
 
-    #[ORM\ManyToMany(targetEntity: Database::class, mappedBy: 'users')]
-    private Collection $databases;
+    #[ORM\ManyToMany(targetEntity: Database::class, inversedBy: 'users')]
+    private Collection $affectedDatabases;
 
     public function __construct()
     {
         $this->servers = new ArrayCollection();
-        $this->databases = new ArrayCollection();
+        $this->affectedDatabases = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -120,7 +119,6 @@ class User
     {
         if (!$this->servers->contains($server)) {
             $this->servers->add($server);
-            $server->addUser($this);
         }
 
         return $this;
@@ -128,9 +126,7 @@ class User
 
     public function removeServer(Server $server): self
     {
-        if ($this->servers->removeElement($server)) {
-            $server->removeUser($this);
-        }
+        $this->servers->removeElement($server);
 
         return $this;
     }
@@ -138,26 +134,23 @@ class User
     /**
      * @return Collection<int, Database>
      */
-    public function getDatabases(): Collection
+    public function getAffectedDatabases(): Collection
     {
-        return $this->databases;
+        return $this->affectedDatabases;
     }
 
-    public function addDatabase(Database $database): self
+    public function addAffectedDatabase(Database $affectedDatabase): self
     {
-        if (!$this->databases->contains($database)) {
-            $this->databases->add($database);
-            $database->addUser($this);
+        if (!$this->affectedDatabases->contains($affectedDatabase)) {
+            $this->affectedDatabases->add($affectedDatabase);
         }
 
         return $this;
     }
 
-    public function removeDatabase(Database $database): self
+    public function removeAffectedDatabase(Database $affectedDatabase): self
     {
-        if ($this->databases->removeElement($database)) {
-            $database->removeUser($this);
-        }
+        $this->affectedDatabases->removeElement($affectedDatabase);
 
         return $this;
     }

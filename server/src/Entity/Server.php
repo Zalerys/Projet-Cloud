@@ -32,14 +32,14 @@ class Server
     private ?\DateTimeImmutable $created_at = null;
 
     #[ORM\OneToMany(mappedBy: 'server', targetEntity: Database::class, orphanRemoval: true)]
-    private Collection $databases;
+    private Collection $dbs;
 
-    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'servers')]
+    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'servers')]
     private Collection $users;
 
     public function __construct()
     {
-        $this->databases = new ArrayCollection();
+        $this->dbs = new ArrayCollection();
         $this->users = new ArrayCollection();
     }
 
@@ -111,24 +111,24 @@ class Server
     /**
      * @return Collection<int, Database>
      */
-    public function getDatabases(): Collection
+    public function getDbs(): Collection
     {
-        return $this->databases;
+        return $this->dbs;
     }
 
-    public function addDatabase(Database $database): self
+    public function addDbs(Database $database): self
     {
-        if (!$this->databases->contains($database)) {
-            $this->databases->add($database);
+        if (!$this->dbs->contains($database)) {
+            $this->dbs->add($database);
             $database->setServer($this);
         }
 
         return $this;
     }
 
-    public function removeDatabase(Database $database): self
+    public function removeDbs(Database $database): self
     {
-        if ($this->databases->removeElement($database)) {
+        if ($this->dbs->removeElement($database)) {
             // set the owning side to null (unless already changed)
             if ($database->getServer() === $this) {
                 $database->setServer(null);
@@ -150,6 +150,7 @@ class Server
     {
         if (!$this->users->contains($user)) {
             $this->users->add($user);
+            $user->addServer($this);
         }
 
         return $this;
@@ -157,7 +158,9 @@ class Server
 
     public function removeUser(User $user): self
     {
-        $this->users->removeElement($user);
+        if ($this->users->removeElement($user)) {
+            $user->removeServer($this);
+        }
 
         return $this;
     }
