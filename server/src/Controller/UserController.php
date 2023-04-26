@@ -8,8 +8,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class UserController extends AbstractController
 {
-    #[Route('/user', name: 'app_user')]
-    public function index(): JsonResponse
+    // Get user details
+    #[Route('/user/{id}', name: 'user_details')]
+    public function user_details(): JsonResponse
     {
         return $this->json([
             'message' => 'Welcome to your new controller!',
