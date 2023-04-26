@@ -24,8 +24,8 @@ RUN curl -sS https://getcomposer.org/installer | php -- \
 RUN curl -sS https://get.symfony.com/cli/installer | bash \
     && mv /root/.symfony5/bin/symfony /usr/local/bin/symfony
 
-RUN composer require annotations
-RUN composer require symfony/asset
-RUN composer require profiler --dev
-RUN composer require orm -W
-RUN composer require symfony/maker-bundle --dev
+#RUN composer require annotations
+#RUN composer require symfony/asset
+#RUN composer require profiler --dev
+#RUN composer require orm -W
+#RUN composer require symfony/maker-bundle --dev
