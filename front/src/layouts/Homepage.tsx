@@ -3,6 +3,7 @@ import Card from '../components/Card';
 import CheckLog from '../controller/log';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import BackgroundStyle from '../components/BackgroundStyle';
 
 export default function Homepage() {
   const navigate = useNavigate();
@@ -13,7 +14,7 @@ export default function Homepage() {
     }
   });
   return (
-    <div className="sm:mx-16">
+    <div className="relative w-full">
       <HomepageContent />
       <div className="grid gap-10 mx-16 my-12 md:grid-cols-2 lg:grid-cols-3">
         <Card />
@@ -21,6 +22,7 @@ export default function Homepage() {
         <Card />
         <Card />
       </div>
+      <BackgroundStyle setBackground={2}/>
     </div>
   );
 }
