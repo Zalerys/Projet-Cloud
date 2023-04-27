@@ -6,7 +6,6 @@ use App\Entity\Database;
 use App\Entity\Server;
 use App\Repository\DatabaseRepository;
 use App\Repository\ServerRepository;
-//use http\Env\Request;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -22,14 +21,6 @@ class ServerController extends AbstractController
     {
         $servers = $serverRepository->findAll();
         $jsonServers = $serializer->serialize($servers, 'json', ['groups' => 'server_list']);
-        return new JsonResponse($jsonServers, Response::HTTP_OK, [], true);
-    }
-
-    #[Route('/server', name: 'server_list', methods: ['GET'])]
-    public function serverList(SerializerInterface $serializer, ServerRepository $serverRepository): JsonResponse
-    {
-        $servers = $serverRepository->findAll();
-        $jsonServers = $serializer->serialize($servers, 'json');
         return new JsonResponse($jsonServers, Response::HTTP_OK, [], true);
     }
 

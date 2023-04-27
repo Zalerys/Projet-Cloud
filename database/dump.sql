@@ -1,3 +1,12 @@
+create table doctrine_migration_versions
+(
+    version        varchar(191) not null
+        primary key,
+    executed_at    datetime     null,
+    execution_time int          null
+)
+    collate = utf8mb3_unicode_ci;
+
 create table server
 (
     id                  int auto_increment
@@ -10,30 +19,35 @@ create table server
 )
     collate = utf8mb4_unicode_ci;
 
-create table `database`
+create table program_db
 (
     id         int auto_increment
         primary key,
     server_id  int          not null,
     name       varchar(255) not null,
     created_at datetime     not null comment '(DC2Type:datetime_immutable)',
-    constraint FK_C953062E1844E6B7
+    constraint FK_6275DC721844E6B7
         foreign key (server_id) references server (id)
 )
     collate = utf8mb4_unicode_ci;
 
-create index IDX_C953062E1844E6B7
-    on `database` (server_id);
+create index IDX_6275DC721844E6B7
+    on program_db (server_id);
 
 create table user
 (
     id             int auto_increment
         primary key,
-    username       varchar(255)  not null,
-    email          varchar(255)  not null,
-    password       varchar(255)  not null,
-    public_ssh_key varchar(1000) null,
-    created_at     datetime      not null comment '(DC2Type:datetime_immutable)'
+    username       varchar(180)   not null,
+    roles          longtext       not null comment '(DC2Type:json)',
+    password       varchar(255)   not null,
+    email          varchar(255)   not null,
+    public_ssh_key varchar(10000) null,
+    created_at     datetime       not null comment '(DC2Type:datetime_immutable)',
+    constraint UNIQ_8D93D649E7927C74
+        unique (email),
+    constraint UNIQ_8D93D649F85E0677
+        unique (username)
 )
     collate = utf8mb4_unicode_ci;
 
@@ -46,7 +60,7 @@ create table database_user
         foreign key (user_id) references user (id)
             on delete cascade,
     constraint FK_FFEE9405F0AA09DB
-        foreign key (database_id) references `database` (id)
+        foreign key (database_id) references program_db (id)
             on delete cascade
 )
     collate = utf8mb4_unicode_ci;

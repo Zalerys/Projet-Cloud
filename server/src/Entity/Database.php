@@ -31,7 +31,7 @@ class Database
     #[Groups(['database_single'])]
     private ?\DateTimeImmutable $created_at = null;
 
-    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'affectedDatabases')]
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'dbs')]
     #[Groups(['database_single'])]
     private Collection $users;
 
@@ -93,7 +93,6 @@ class Database
     {
         if (!$this->users->contains($user)) {
             $this->users->add($user);
-            $user->addAffectedDatabase($this);
         }
 
         return $this;
@@ -101,9 +100,7 @@ class Database
 
     public function removeUser(User $user): self
     {
-        if ($this->users->removeElement($user)) {
-            $user->removeAffectedDatabase($this);
-        }
+        $this->users->removeElement($user);
 
         return $this;
     }
