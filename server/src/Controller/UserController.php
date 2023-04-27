@@ -80,6 +80,4 @@ class UserController extends AbstractController
         return new JsonResponse(null, Response::HTTP_NO_CONTENT);
 
     }
-
-
 }

@@ -41,4 +41,36 @@ class AuthController extends AbstractController
             ], Response::HTTP_CREATED
         );
     }
+
+    #[Route('/api/login', name: "login", methods: ['POST'])]
+    public function login(Request $request, UserRepository $entityRepository, JWTTokenManagerInterface $jwt_manager): Response
+    {
+        // Récupérer les données du formulaire
+        $data = json_decode($request->getContent(), true);
+
+        // Récupérer l'utilisateur par son email
+        $user = $entityRepository->findOneBy(['username' => $data['username']]);
+
+        // Vérifier si l'utilisateur existe et si le mot de passe est correct
+        if ($user && password_verify($data['password'], $user->getPassword())) {
+            //création du token
+            $jwt = $jwt_manager->create($user);
+
+            // Retourner une réponse
+            return $this->json(
+                [
+                    $user,
+                    'token' => $jwt,
+                    'message' => 'user logged in'
+                ], Response::HTTP_OK
+            );
+        }
+
+        // Retourner une réponse
+        return $this->json(
+            [
+                'message' => 'user not found'
+            ], Response::HTTP_NOT_FOUND
+        );
+    }
 }
