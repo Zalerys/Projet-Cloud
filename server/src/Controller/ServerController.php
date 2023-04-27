@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Server;
 use App\Repository\ServerRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -11,28 +12,27 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 class ServerController extends AbstractController
 {
-    #[Route('/server', name: 'app_server', methods: ['POST'])]
-    public function index(): JsonResponse
+    #[Route('/servers', name: 'server_list', methods: ['GET'])]
+    public function serverList(SerializerInterface $serializer, ServerRepository $serverRepository): JsonResponse
     {
-        return $this->json([
-            'message' => 'Welcome to your new controller!',
-            'path' => 'src/Controller/ServerController.php',
-        ]);
+        $servers = $serverRepository->findAll();
+        $jsonServers = $serializer->serialize($servers, 'json', ['groups' => 'server_list']);
+        return new JsonResponse($jsonServers, Response::HTTP_OK, [], true);
     }
 
-    #[Route("/server/{id}", name: "server-details", methods: ['GET'])]
+    #[Route("/server/{id}", name: "server_details", methods: ['GET'])]
     public function serverView(int $id, SerializerInterface $serializer, ServerRepository $serverRepository): JsonResponse
     {
         $server = $serverRepository->find($id);
         if ($server) {
-            $jsonServer = $serializer->serialize($server, 'json');
+            $jsonServer = $serializer->serialize($server, 'json', 'server_single');
             return new JsonResponse($jsonServer, Response::HTTP_OK, [], true);
         }
         return new JsonResponse(null, Response::HTTP_NOT_FOUND);
     }
 
     #[Route('/server/{token}', name: "create_server", methods: ['POST'])]
-    public function createServer(string $token) {
+    public function createServer(string $token, SerializerInterface $serializer, ServerRepository $serverRepository) {
 
     }
 
