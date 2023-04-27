@@ -32,9 +32,9 @@ services:
             MYSQL_DATABASE: tp-data
             MYSQL_ROOT_PASSWORD: 4t8MrD5hDRChnq
         volumes:
-            - database:/var/lib/mysql
 #             Pour lancer un dump automatiquement au montage du conteneur
-#            - ./database/dump.sql:/docker-entrypoint-initdb.d/dump.sql
+            - ./database/dump.sql:/docker-entrypoint-initdb.d/dump.sql
+#            - database:/var/lib/mysql
 
     phpmyadmin:
         image: phpmyadmin
