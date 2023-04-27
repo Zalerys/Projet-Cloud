@@ -5,9 +5,15 @@ import CardStorage from '../components/CardStorage';
 import CardListBackup from '../components/CardListBackup';
 import Title from '../components/Title';
 import ButtonWhite from '../components/ButtonWhite';
+import { postFetch } from '../controller/postFetch';
+import Button from '../components/Button';
 
 export default function ServeurContent() {
   const navigate = useNavigate();
+  const [state, setState] = useState({
+    server: '',
+    user: sessionStorage.getItem('user'),
+  });
 
   const toLogout = (event: React.MouseEvent<HTMLButtonElement>) => {
     sessionStorage.removeItem('user');
@@ -17,6 +23,15 @@ export default function ServeurContent() {
   const toHomePage = (event: React.MouseEvent<HTMLButtonElement>) => {
     navigate('/homepage');
   };
+
+  async function deleteServer() {
+    if ((await postFetch('/deleteserver', state)) === false) {
+      console.log('failed to connect');
+    } else {
+      console.log('server delete');
+      navigate('/homepage');
+    }
+  }
 
   // async function getData() {
   //   var user = sessionStorage.getItem('user');
@@ -45,6 +60,13 @@ export default function ServeurContent() {
           <CardDBUser name="testname" password="testpassword" />
           <CardStorage />
         </div>
+      </div>
+      <div className="flex-1 text-end mt-20 mr-10">
+        <Button
+          className={'h-10 px-6 py-2 rounded text-whiteViolet bg-red'}
+          name="Delete Server"
+          onClick={deleteServer}
+        />
       </div>
     </div>
   );
