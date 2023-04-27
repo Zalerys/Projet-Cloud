@@ -25,7 +25,7 @@ class ServerController extends AbstractController
     }
 
     #[Route("/api/servers/{id}", name: "server-details", methods: ['GET'])]
-    public function serverView(int $id, SerializerInterface $serializer, ServerRepository $serverRepository): JsonResponse
+    public function serverDetails(int $id, SerializerInterface $serializer, ServerRepository $serverRepository): JsonResponse
     {
         $server = $serverRepository->find($id);
         if ($server) {
