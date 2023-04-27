@@ -23,7 +23,7 @@ class Server
     private ?string $name = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['server_single', 'server_list'])]
+    #[Groups(['server_single', 'server_list', 'user_single'])]
     private ?float $storage_size = null;
 
     #[ORM\Column(length: 255, nullable: true)]
