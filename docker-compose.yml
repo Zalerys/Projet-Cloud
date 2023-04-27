@@ -26,8 +26,8 @@ services:
     database:
         image: mariadb:10.8.2
         restart: always
-#        ports:
-#            - "127.0.0.1:3500:3306"
+        ports:
+            - "3500:3306"
         environment:
             MYSQL_DATABASE: tp-data
             MYSQL_ROOT_PASSWORD: 4t8MrD5hDRChnq

@@ -8,7 +8,6 @@ use App\Factories\PDOFactory;
 use App\Framework\Entity\BaseController;
 use App\Framework\Route\Route;
 use App\Helpers\Filters;
-use App\Helpers\Tools;
 use App\Managers\UserManager;
 use App\Service\JWTHelper;
 use App\Types\HttpMethods;

@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class AuthController extends AbstractController
 {
-    #[Route('/auth/register', name: "register", methods: ['POST'])]
+    #[Route('/api/auth/register', name: "register", methods: ['POST'])]
     public function createUser(Request $request, UserRepository $entityRepository): Response
     {
         // Récupérer les données du formulaire
@@ -38,7 +38,7 @@ class AuthController extends AbstractController
         );
     }
 
-    #[Route("/auth/register", name: "register", methods: ['POST'])]
+    #[Route("/api/auth/register", name: "register", methods: ['POST'])]
     public function register(): void
     {
         if (!empty(Filters::postString('password')) && !empty(Filters::postString('password-confirm')) && Filters::postString('password') === Filters::postString('password-confirm')) {
