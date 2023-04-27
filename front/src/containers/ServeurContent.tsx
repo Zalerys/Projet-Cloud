@@ -52,7 +52,7 @@ export default function ServeurContent() {
       <div className="text-center">
         <Title name="Serveur" />
       </div>
-      <div className="flex gap-4">
+      <div className="flex flex-col gap-4 lg:flex-row">
         <div className="flex-1 w-90">
           <CardListBackup />
         </div>

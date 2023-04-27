@@ -25,7 +25,7 @@ export default function AuthenticationContent() {
   };
 
   async function register() {
-    if ((await postFetch('/auth/register', state)) === false) {
+    if ((await postFetch('/api/register', state)) === false) {
       setErr('Account already created or invalid');
     } else {
       sessionStorage.setItem('user', state.username);
