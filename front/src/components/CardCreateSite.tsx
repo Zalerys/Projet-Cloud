@@ -28,7 +28,11 @@ const CardCreateSite = () => {
       state,
       sessionStorage.getItem('user'),
     );
-    console.log(reponse);
+    if (reponse === false) {
+      console.log(reponse);
+    } else {
+      navigate('/homepage');
+    }
   }
   const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
