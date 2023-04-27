@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Database;
 use App\Entity\Server;
+use App\Repository\DatabaseRepository;
 use App\Repository\ServerRepository;
 //use http\Env\Request;
 use App\Repository\UserRepository;
@@ -44,7 +46,7 @@ class ServerController extends AbstractController
     }
 
     #[Route('/server/{id}', name: "create_server", methods: ['POST'])]
-    public function createServer(int $id, Request $request, ServerRepository $serverRepository, UserRepository $userRepository): Response
+    public function createServer(int $id, Request $request, ServerRepository $serverRepository, UserRepository $userRepository, DatabaseRepository $databaseRepository): Response
     {
         // Récupérer les données du formulaire
         $data = json_decode($request->getContent(), true);
@@ -61,7 +63,14 @@ class ServerController extends AbstractController
             ->setCreatedAt(new \DateTimeImmutable())
             ->addUser($user);
 
+        $db = (new Database())
+            ->setName("db_". $data['name'])
+            ->setServer($server)
+            ->setCreatedAt(new \DateTimeImmutable())
+            ->addUser($user);
+
         // Persister l'entité dans la base de données
+        $databaseRepository->save($db);
         $serverRepository->save($server, true);
 
         // Retourner une réponse
