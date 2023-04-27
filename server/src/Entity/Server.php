@@ -42,7 +42,7 @@ class Server
     #[Groups(['server_single'])]
     private Collection $dbs;
 
-    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'servers')]
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'servers')]
     #[Groups(['server_single'])]
     private Collection $users;
 
@@ -159,7 +159,6 @@ class Server
     {
         if (!$this->users->contains($user)) {
             $this->users->add($user);
-            $user->addServer($this);
         }
 
         return $this;
@@ -167,10 +166,9 @@ class Server
 
     public function removeUser(User $user): self
     {
-        if ($this->users->removeElement($user)) {
-            $user->removeServer($this);
-        }
+        $this->users->removeElement($user);
 
         return $this;
     }
+
 }
