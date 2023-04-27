@@ -51,7 +51,7 @@ const CardCreateSite = () => {
   return (
     <div className="relative z-50 max-w-sm px-12 py-6 m-auto text-center bg-white border-2 rounded-sm border-violet">
       <Title name="Fill your information" />
-      <form className="flex flex-col items-center gap-10" action="post">
+      <form className="flex flex-col items-center gap-10">
         <Input
           placeholder="Nom du serveur"
           required={true}
