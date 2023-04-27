@@ -8,7 +8,6 @@ use App\Factories\PDOFactory;
 use App\Helpers\Regex;
 use App\Managers\DatabaseManager;
 use App\Managers\ServerManager;
-use App\Managers\UserManager;
 use DateTimeImmutable;
 
 class Server extends BaseEntity

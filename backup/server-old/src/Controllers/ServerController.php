@@ -9,7 +9,6 @@ use App\Exceptions\ServerException;
 use App\Factories\PDOFactory;
 use App\Framework\Entity\BaseController;
 use App\Framework\Route\Route;
-use App\Helpers\Tools;
 use App\Managers\DatabaseManager;
 use App\Managers\ServerManager;
 use App\Service\JWTHelper;

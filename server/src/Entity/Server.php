@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ServerRepository::class)]
 class Server
@@ -14,27 +15,35 @@ class Server
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['server_single', 'server_list', 'database_single', 'user_single'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['server_single', 'server_list', 'database_single', 'user_single'])]
     private ?string $name = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['server_single', 'server_list', 'user_single'])]
     private ?float $storage_size = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['server_single'])]
     private ?string $backups_folder_path = null;
 
     #[ORM\Column(type: Types::TIME_IMMUTABLE, nullable: true)]
+    #[Groups(['server_single'])]
     private ?\DateTimeImmutable $auto_backups_time = null;
 
     #[ORM\Column]
+    #[Groups(['server_single'])]
     private ?\DateTimeImmutable $created_at = null;
 
     #[ORM\OneToMany(mappedBy: 'server', targetEntity: Database::class, orphanRemoval: true)]
+    #[Groups(['server_single'])]
     private Collection $dbs;
 
-    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'servers')]
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'servers')]
+    #[Groups(['server_single'])]
     private Collection $users;
 
     public function __construct()
@@ -150,7 +159,6 @@ class Server
     {
         if (!$this->users->contains($user)) {
             $this->users->add($user);
-            $user->addServer($this);
         }
 
         return $this;
@@ -158,10 +166,9 @@ class Server
 
     public function removeUser(User $user): self
     {
-        if ($this->users->removeElement($user)) {
-            $user->removeServer($this);
-        }
+        $this->users->removeElement($user);
 
         return $this;
     }
+
 }
