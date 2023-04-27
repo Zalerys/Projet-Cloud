@@ -32,21 +32,22 @@ class UserController extends AbstractController
         return new JsonResponse(null, Response::HTTP_NOT_FOUND);
     }
 
-    #[Route('/api/users/pwd/{id}', name: "update_pwd_user", methods: ['PUT'])]
-    public function modifyPassword(int $id, Request $request, UserRepository $entityRepository, User $user): Response {
-        //Verifier si l'utilisateur existe
-        $user = $entityRepository->find($id);
-        if (!$user) {
-            return $this->json([
-                'error' => 'L\'utilisateur n\'existe pas'
-            ], Response::HTTP_NOT_FOUND);
-        }
-
+    #[Route('/api/users/pwd', name: "update_pwd_user", methods: ['PUT'])]
+    public function modifyPassword(Request $request, UserRepository $entityRepository, User $user): Response {
         // Récupérer les données du formulaire
         $data = json_decode($request->getContent(), true);
 
+        // Récupérer l'utilisateur avec le jwt token
+        $token = $request->headers->get('Authorization');
+        $token = str_replace('Bearer ', '', $token);
+        $token = explode('.', $token)[1];
+        $token = base64_decode($token);
+        $token = json_decode($token, true);
+        $user = $entityRepository->findOneBy(['username' => $token['username']]);
+
         // Créer une nouvelle instance de l'entité User
         $user->setPassword($data['password']);
+        if (!empty($data['password'])) $user->setPassword(password_hash($data['password'], PASSWORD_DEFAULT));
 
         // Persister l'entité dans la base de données
         $entityRepository->save($user, true);
@@ -56,21 +57,21 @@ class UserController extends AbstractController
     }
 
 
-    #[Route('/api/users/ssh/{id}', name: "add_ssh_user", methods: ['PUT'])]
-    public function addSshKeyUser(int $id, Request $request, UserRepository $entityRepository, User $user): Response {
-        //Verifier si l'utilisateur existe
-        $user = $entityRepository->find($id);
-        if (!$user) {
-            return $this->json([
-                'error' => 'L\'utilisateur n\'existe pas'
-            ], Response::HTTP_NOT_FOUND);
-        }
-
+    #[Route('/api/users/ssh', name: "add_ssh_user", methods: ['PUT'])]
+    public function addSshKeyUser(Request $request, UserRepository $entityRepository, User $user): Response {
         // Récupérer les données du formulaire
         $data = json_decode($request->getContent(), true);
 
+        // Récupérer l'utilisateur avec le jwt token
+        $token = $request->headers->get('Authorization');
+        $token = str_replace('Bearer ', '', $token);
+        $token = explode('.', $token)[1];
+        $token = base64_decode($token);
+        $token = json_decode($token, true);
+        $user = $entityRepository->findOneBy(['username' => $token['username']]);
+
         // Créer une nouvelle instance de l'entité User
-        $user->setPublicSshKey($data['sshKey']);
+        if (!empty($data['sshKey'])) $user->setPublicSshKey($data['sshKey']);
 
         // Persister l'entité dans la base de données
         $entityRepository->save($user, true);
