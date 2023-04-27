@@ -25,10 +25,12 @@ export default function AuthenticationContent() {
   };
 
   async function register() {
-    if ((await postFetch('/api/register', state)) === false) {
-      setErr('Account already created or invalid');
+    const reponse = await postFetch('/api/register', state);
+    if (reponse === false) {
+      console.log(reponse);
+      // setErr('Account already created or invalid');
     } else {
-      sessionStorage.setItem('user', state.username);
+      sessionStorage.setItem('user', reponse.token);
       navigate('/homepage');
     }
   }
@@ -66,9 +68,9 @@ export default function AuthenticationContent() {
           onClick={register}
         />
       </div>
-      <span className="absolute mb-3 text-sm italic left-5 bottom-24 text-violet">
+      {/* <span className="absolute mb-3 text-sm italic left-5 bottom-24 text-violet">
         Optional
-      </span>
+      </span> */}
     </div>
   );
 }

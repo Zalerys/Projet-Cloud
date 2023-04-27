@@ -24,11 +24,12 @@ export default function AuthenticationContent() {
   };
 
   async function connect() {
-    if ((await postFetch('/api/login', state)) === false) {
-      console.log('Wrong email or password');
-    } else {
-      sessionStorage.setItem('user', state.username);
+    const reponse = await postFetch('/api/login', state);
+    if (reponse.message === 'user logged in') {
+      sessionStorage.setItem('user', reponse.token);
       navigate('/homepage');
+    } else {
+      console.log('Wrong email or password');
     }
   }
 

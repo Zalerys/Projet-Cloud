@@ -6,7 +6,7 @@ export async function postFetch(url: string, data: any) {
       body: JSON.stringify(data),
     });
     const json = await response.json();
-    return true;
+    return json;
   } catch (error) {
     console.log(error);
     return false;
