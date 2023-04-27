@@ -29,7 +29,7 @@ export default function Card() {
 
   return (
     <>
-      <div className="px-6 py-2 border-2 rounded shadow-md bg-whiteViolet border-violet focus:ring-opacity-75">
+      <div className="z-50 px-6 py-2 border-2 rounded shadow-md bg-whiteViolet border-violet focus:ring-opacity-75">
         <div>
           {servers.length > 0 && (
             <div>
