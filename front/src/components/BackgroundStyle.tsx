@@ -52,10 +52,6 @@ const BackgroundStyle = (props: any) => {
           >
             <defs>
               <filter id="blur1" x="-10%" y="-10%">
-                <feFlood
-                  flood-opacity="0"
-                  result="BackgroundImageFix"
-                ></feFlood>
                 <feBlend
                   mode="normal"
                   in="SourceGraphic"
