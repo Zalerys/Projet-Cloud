@@ -31,7 +31,7 @@ class UserController extends AbstractController
         return new JsonResponse($jsonUsers, Response::HTTP_OK, [], true);
     }
 
-    #[Route('/user/{id}', name: 'user_details')]
+    #[Route('/user/{id}', name: 'user_details', methods: ['GET'])]
     public function userView(int $id, SerializerInterface $serializer, UserRepository $userRepository): JsonResponse
     {
         $user = $userRepository->find($id);
@@ -61,6 +61,24 @@ class UserController extends AbstractController
 
         // Retourner une réponse
         return $this->redirectToRoute('user_list');
+    }
+
+    #[Route('/user/{id}', name: "delete_user", methods: ['DELETE'])]
+    public function deleteUser(int $id, Request $request, UserRepository $entityRepository, User $user): Response {
+        //Verifier si l'utilisateur existe
+        $user = $entityRepository->find($id);
+        if (!$user) {
+            return $this->json([
+                'error' => 'L\'utilisateur n\'existe pas'
+            ], Response::HTTP_NOT_FOUND);
+        }
+
+        //Supprimer l'utilisateur
+        $entityRepository->remove($user, true);
+
+        //Retourner une réponse
+        return new JsonResponse(null, Response::HTTP_NO_CONTENT);
+
     }
 
 
