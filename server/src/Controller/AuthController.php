@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class AuthController extends AbstractController
 {
-    #[Route('/api/auth/register', name: "register", methods: ['POST'])]
+    #[Route('/api/register', name: "register", methods: ['POST'])]
     public function createUser(Request $request, UserRepository $entityRepository): Response
     {
         // Récupérer les données du formulaire

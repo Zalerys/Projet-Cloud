@@ -14,7 +14,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 class UserController extends AbstractController
 {
     // Get user details
-    #[Route('/user/{id}', name: 'user_details')]
+    #[Route('/api/users/{id}', name: 'user_details')]
     public function user_details(): JsonResponse
     {
         return $this->json([
@@ -23,7 +23,7 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/user', name: 'user_list', methods: ['GET'])]
+    #[Route('/api/users', name: 'user_list', methods: ['GET'])]
     public function userList(SerializerInterface $serializer, UserRepository $userRepository): JsonResponse
     {
         $users = $userRepository->findAll();
@@ -31,7 +31,7 @@ class UserController extends AbstractController
         return new JsonResponse($jsonUsers, Response::HTTP_OK, [], true);
     }
 
-    #[Route('/user/{id}', name: 'user_details', methods: ['GET'])]
+    #[Route('/api/users/{id}', name: 'user_details', methods: ['GET'])]
     public function userView(int $id, SerializerInterface $serializer, UserRepository $userRepository): JsonResponse
     {
         $user = $userRepository->find($id);
@@ -43,7 +43,7 @@ class UserController extends AbstractController
     }
 
 
-    #[Route('/user', name: "create_user", methods: ['POST'])]
+    #[Route('/api/users', name: "create_user", methods: ['POST'])]
     public function createUser(Request $request, UserRepository $entityRepository): Response
     {
         // Récupérer les données du formulaire
@@ -63,7 +63,7 @@ class UserController extends AbstractController
         return $this->redirectToRoute('user_list');
     }
 
-    #[Route('/user/{id}', name: "delete_user", methods: ['DELETE'])]
+    #[Route('/api/users/{id}', name: "delete_user", methods: ['DELETE'])]
     public function deleteUser(int $id, Request $request, UserRepository $entityRepository, User $user): Response {
         //Verifier si l'utilisateur existe
         $user = $entityRepository->find($id);

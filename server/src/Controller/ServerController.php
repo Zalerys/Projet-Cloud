@@ -16,7 +16,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 class ServerController extends AbstractController
 {
-    #[Route('/servers', name: 'server_list', methods: ['GET'])]
+    #[Route('/api/servers', name: 'server_list', methods: ['GET'])]
     public function serverList(SerializerInterface $serializer, ServerRepository $serverRepository): JsonResponse
     {
         $servers = $serverRepository->findAll();
@@ -24,7 +24,7 @@ class ServerController extends AbstractController
         return new JsonResponse($jsonServers, Response::HTTP_OK, [], true);
     }
 
-    #[Route("/server/{id}", name: "server-details", methods: ['GET'])]
+    #[Route("/api/servers/{id}", name: "server-details", methods: ['GET'])]
     public function serverView(int $id, SerializerInterface $serializer, ServerRepository $serverRepository): JsonResponse
     {
         $server = $serverRepository->find($id);
@@ -35,7 +35,7 @@ class ServerController extends AbstractController
         return new JsonResponse(null, Response::HTTP_NOT_FOUND);
     }
 
-    #[Route('/server/{id}', name: "create_server", methods: ['POST'])]
+    #[Route('/api/servers/{id}', name: "create_server", methods: ['POST'])]
     public function createServer(int $id, Request $request, ServerRepository $serverRepository, UserRepository $userRepository, DatabaseRepository $databaseRepository): Response
     {
         // Récupérer les données du formulaire
@@ -68,7 +68,7 @@ class ServerController extends AbstractController
 
     }
 
-    #[Route('/server/{id}', name: "delete_server", methods: ['DELETE'])]
+    #[Route('/api/servers/{id}', name: "delete_server", methods: ['DELETE'])]
     public function deleteServer(int $id) {
 
     }
