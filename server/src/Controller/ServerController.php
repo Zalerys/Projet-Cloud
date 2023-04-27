@@ -53,16 +53,16 @@ class ServerController extends AbstractController
         $server = new Server();
         $server->setCreatedAt(new \DateTimeImmutable());
         $server->addUser($user);
-        if ($data['name']) $server->setName($data['name']);
-        if (!empty ($data['storage_size'])) $server->setStorageSize($data['storage_size']);
-        if (!empty ($data['backups_folder_path'])) $server->setBackupsFolderPath($data['backups_folder_path']);
-        if (!empty ($data['auto_backups_time'])) $server->setAutoBackupsTime(new \DateTimeImmutable());
+        if (!empty($data['name'])) $server->setName($data['name']); else return new JsonResponse(null, Response::HTTP_BAD_REQUEST);
+        if (!empty($data['storage_size'])) $server->setStorageSize($data['storage_size']);
+        if (!empty($data['backups_folder_path'])) $server->setBackupsFolderPath($data['backups_folder_path']);
+        if (!empty($data['auto_backups_time'])) $server->setAutoBackupsTime(new \DateTimeImmutable());
 
         $db = new Database();
+        $db->setName("db_". $data['name']);
         $db->setCreatedAt(new \DateTimeImmutable());
         $db->addUser($user);
         $db->setServer($server);
-        if (!empty ($data['name'])) $db->setName("db_". $data['name']);
 
         // Persister l'entité dans la base de données
         $databaseRepository->save($db);
