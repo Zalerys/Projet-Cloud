@@ -52,7 +52,7 @@ class UserController extends AbstractController
         $entityRepository->save($user, true);
 
         // Retourner une réponse
-        return $this->redirectToRoute('user_details', ['id' => $user->getId()]);
+        return new JsonResponse(null, Response::HTTP_NO_CONTENT);
     }
 
 
@@ -76,7 +76,7 @@ class UserController extends AbstractController
         $entityRepository->save($user, true);
 
         // Retourner une réponse
-        return $this->redirectToRoute('user_details', ['id' => $user->getId()]);
+        return new JsonResponse(null, Response::HTTP_NO_CONTENT);
     }
 
     #[Route('/api/users/{id}', name: "delete_user", methods: ['DELETE'])]
