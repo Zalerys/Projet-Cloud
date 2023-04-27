@@ -25,7 +25,7 @@ class ServerController extends AbstractController
     {
         $server = $serverRepository->find($id);
         if ($server) {
-            $jsonServer = $serializer->serialize($server, 'json', 'server_single');
+            $jsonServer = $serializer->serialize($server, 'json', ['groups' => 'server_single']);
             return new JsonResponse($jsonServer, Response::HTTP_OK, [], true);
         }
         return new JsonResponse(null, Response::HTTP_NOT_FOUND);
