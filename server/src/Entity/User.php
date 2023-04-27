@@ -6,6 +6,8 @@ use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints\Unique;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 class User
@@ -13,27 +15,37 @@ class User
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['user_single', 'user_list', 'server_single', 'database_single'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['user_single', 'user_list', 'server_single', 'database_single'])]
+    #[Unique]
     private ?string $username = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['user_single', 'user_list'])]
+    #[Unique]
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['user_single'])]
     private ?string $password = null;
 
     #[ORM\Column(length: 1000, nullable: true)]
+    #[Groups(['user_single'])]
     private ?string $public_ssh_key = null;
 
     #[ORM\Column]
+    #[Groups(['user_single'])]
     private ?\DateTimeImmutable $created_at = null;
 
     #[ORM\ManyToMany(targetEntity: Server::class, inversedBy: 'users')]
+    #[Groups(['user_single'])]
     private Collection $servers;
 
     #[ORM\ManyToMany(targetEntity: Database::class, inversedBy: 'users')]
+    #[Groups(['user_single'])]
     private Collection $affectedDatabases;
 
     public function __construct()
