@@ -83,23 +83,29 @@ class UserController extends AbstractController
     }
 
     #[Route('/api/users/{id}', name: "delete_user", methods: ['DELETE'])]
-    public function deleteUser(int $id, Request $request, UserRepository $entityRepository, User $user): Response {
+    public function deleteUser(int $id, Request $request, SerializerInterface $serializer, UserRepository $entityRepository): Response {
         //Verifier si l'utilisateur existe
         $user = $entityRepository->find($id);
 
-        if (!$user) {
-            return $this->json([
-                'error' => 'L\'utilisateur n\'existe pas'
-            ], Response::HTTP_NOT_FOUND);
+        if ($user) {
+            try {
+                $entityRepository->remove($user, true);
+
+                return $this->json([
+                    'message' => 'Delete success'
+                ], Response::HTTP_OK);
+            } catch (\Exception $e) {
+                return $this->json([
+                    'message' => 'Delete failed'
+                ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
+
         }
 
-        if ($user->getRoles())
-
-        //Supprimer l'utilisateur
-        $entityRepository->remove($user, true);
-
         //Retourner une réponse
-        return new JsonResponse(null, Response::HTTP_NO_CONTENT);
+        return $this->json([
+            'error' => 'L\'utilisateur n\'existe pas'
+        ], Response::HTTP_NOT_FOUND);
 
     }
 }
