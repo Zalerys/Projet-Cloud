@@ -25,14 +25,16 @@ class ServerController extends AbstractController
     }
 
     #[Route("/api/servers/{id}", name: "server-details", methods: ['GET'])]
-    public function serverDetails(int $id, SerializerInterface $serializer, ServerRepository $serverRepository): JsonResponse
+    public function serverDetails(int $id, Request $request, SerializerInterface $serializer, ServerRepository $serverRepository): JsonResponse
     {
+        $data = json_decode($request->getContent(), true);
+
         $server = $serverRepository->find($id);
         if ($server) {
-            $databasesize = shell_exec('sudo ./../server/scripts/databasesize.sh' .$data['username']." "$data['servername']);
+//            $databasesize = shell_exec('sudo ./../server/scripts/databasesize.sh' .$data['username']." "$data['servername']);
             $cpu = shell_exec('sudo ./../server/scripts/CPUstats.sh');
             $ram = shell_exec('sudo ./../server/scripts/RAMstats.sh');
-            $serversize = shell_exec('sudo ./../server/scripts/serversize.sh' .data['username']." ".data['servername']);
+//            $serversize = shell_exec('sudo ./../server/scripts/serversize.sh' .$data['username']." ".$data['servername']);
             $memory = shell_exec('sudo ./../server/scripts/checkmemorysize.sh');
             $jsonServer = $serializer->serialize($server, 'json', ['groups' => 'server_single']);
             return new JsonResponse($jsonServer, Response::HTTP_OK, [], true);
