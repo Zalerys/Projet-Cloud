@@ -25,14 +25,16 @@ class ServerController extends AbstractController
     }
 
     #[Route("/api/servers/{id}", name: "server-details", methods: ['GET'])]
-    public function serverDetails(int $id, SerializerInterface $serializer, ServerRepository $serverRepository): JsonResponse
+    public function serverDetails(int $id, Request $request, SerializerInterface $serializer, ServerRepository $serverRepository): JsonResponse
     {
+        $data = json_decode($request->getContent(), true);
+
         $server = $serverRepository->find($id);
         if ($server) {
-            $databasesize = shell_exec('sudo ./../server/scripts/databasesize.sh' .$data['username']." "$data['servername']);
+//            $databasesize = shell_exec('sudo ./../server/scripts/databasesize.sh' .$data['username']." "$data['servername']);
             $cpu = shell_exec('sudo ./../server/scripts/CPUstats.sh');
             $ram = shell_exec('sudo ./../server/scripts/RAMstats.sh');
-            $serversize = shell_exec('sudo ./../server/scripts/serversize.sh' .data['username']." ".data['servername']);
+//            $serversize = shell_exec('sudo ./../server/scripts/serversize.sh' .$data['username']." ".$data['servername']);
             $memory = shell_exec('sudo ./../server/scripts/checkmemorysize.sh');
             $jsonServer = $serializer->serialize($server, 'json', ['groups' => 'server_single']);
             return new JsonResponse($jsonServer, Response::HTTP_OK, [], true);
@@ -90,7 +92,29 @@ class ServerController extends AbstractController
     }
 
     #[Route('/api/servers/{id}', name: "delete_server", methods: ['DELETE'])]
-    public function deleteServer(int $id) {
+    public function deleteServer(int $id, Request $request, SerializerInterface $serializer, ServerRepository $serverRepository) {
+        //Verifier si l'utilisateur existe
+        $server = $serverRepository->find($id);
+
+        if ($server) {
+            try {
+                $serverRepository->remove($server, true);
+
+                return $this->json([
+                    'message' => 'Delete success'
+                ], Response::HTTP_OK);
+            } catch (\Exception $e) {
+                return $this->json([
+                    'message' => 'Delete failed'
+                ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
+
+        }
+
+        //Retourner une réponse
+        return $this->json([
+            'error' => 'Server not found'
+        ], Response::HTTP_NOT_FOUND);
 
     }
 }
