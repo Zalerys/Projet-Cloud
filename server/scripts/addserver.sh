@@ -6,7 +6,7 @@ servername="$1"
 username="$2"
 
 #Creation Repertoire du Serveur
-sudo  mkdir /var/www/html/$username/$servername
+sudo  mkdir /home/$username/$servername
 
 #Création du fichier config
 
@@ -25,7 +25,7 @@ server {
 
         server_name www.$servername.fr;
 
-        root /var/www/html/$username/$servername;
+        root /home/$username/$servername;
         index index.html index.php;
 
         location / {

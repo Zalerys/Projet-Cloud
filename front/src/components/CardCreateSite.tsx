@@ -2,7 +2,7 @@ import React from 'react';
 import { useState } from 'react';
 import Title from './Title';
 import Input from './Input';
-import { postFetch } from '../controller/postFetch';
+import { postFetchToken } from '../controller/postFetchToken';
 import { useNavigate } from 'react-router-dom';
 import Button from './Button';
 
@@ -11,7 +11,7 @@ const CardCreateSite = () => {
 
   const [state, setState] = useState({
     name: '',
-    html: '',
+    // html: '',
   });
   const [file, setFile] = useState<File | null>(null);
 
@@ -23,8 +23,13 @@ const CardCreateSite = () => {
   };
 
   async function createserver() {
-    if ((await postFetch('/servers', state)) === false) {
-      console.log('erreur creation server');
+    const reponse = await postFetchToken(
+      '/api/servers',
+      state,
+      sessionStorage.getItem('user'),
+    );
+    if (reponse === false) {
+      console.log(reponse);
     } else {
       navigate('/homepage');
     }
@@ -51,7 +56,7 @@ const CardCreateSite = () => {
   return (
     <div className="relative z-50 max-w-sm px-12 py-6 m-auto text-center bg-white border-2 rounded-sm border-violet">
       <Title name="Fill your information" />
-      <form className="flex flex-col items-center gap-10" action="post">
+      <div className="flex flex-col items-center gap-10">
         <Input
           placeholder="Nom du serveur"
           required={true}
@@ -79,7 +84,7 @@ const CardCreateSite = () => {
           name="To validate"
           className={'h-10 w-40 px-6 py-2 rounded bg-violet text-whiteViolet'}
         />
-      </form>
+      </div>
     </div>
   );
 };

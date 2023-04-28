@@ -1,26 +1,47 @@
 import HomepageContent from '../containers/HomepageContent';
 import Card from '../components/Card';
 import CheckLog from '../controller/log';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import BackgroundStyle from '../components/BackgroundStyle';
+import { getFetch } from '../controller/getFetch';
+
+interface Item {
+  id: number;
+  name: string;
+}
 
 export default function Homepage() {
   const navigate = useNavigate();
+  if (CheckLog() === false) {
+    navigate('/authentication');
+  }
+
+  const [items, setItems] = useState<Item[]>([]);
 
   useEffect(() => {
-    if (CheckLog() === false) {
-      navigate('/authentication');
-    }
-  });
+    const fetchData = async () => {
+      const reponse = await getFetch(
+        `/api/servers`,
+        sessionStorage.getItem('user'),
+      );
+      setItems(reponse);
+    };
+
+    fetchData();
+  }, []);
+
   return (
-    <div className="mx-16">
+    <div className="relative w-full">
       <HomepageContent />
-      <div className="grid grid-cols-3 gap-10 mx-16 my-12">
-        <Card />
-        <Card />
-        <Card />
-        <Card />
+      <div className="grid gap-10 mx-16 my-12 md:grid-cols-2 lg:grid-cols-3">
+        {items?.map((item) => (
+          <div key={item.id} className="z-50">
+            <Card name={item.name} id={item.id} />
+          </div>
+        ))}
       </div>
+      <BackgroundStyle setBackground={2} />
     </div>
   );
 }

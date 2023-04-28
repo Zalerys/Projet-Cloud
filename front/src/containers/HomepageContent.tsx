@@ -1,7 +1,6 @@
 import ButtonWhite from '../components/ButtonWhite';
 import Button from '../components/Button';
 import { useNavigate } from 'react-router-dom';
-import { getFetch } from '../controller/getFetch';
 import '../index.css';
 
 export default function HomepageContent() {
@@ -19,26 +18,24 @@ export default function HomepageContent() {
   const toProfil = (event: React.MouseEvent<HTMLButtonElement>) => {
     navigate('/profil');
   };
-  async function onClickNewExpense(state: any) {
-    var user = sessionStorage.getItem('user');
-    const data = await getFetch(`/servers/list/${user}`);
-  }
 
   return (
     <div>
-      <div className="flex justify-between">
-        <div className="m-4">
+      <div className="flex justify-between h-50">
+        <div className="z-50 m-4">
           <ButtonWhite onClick={toProfil} name="Profil" />
         </div>
-        <div className="m-4">
+        <div className="z-50 m-4">
           <ButtonWhite onClick={toLogout} name="Déconnexion" />
         </div>
       </div>
-      <div className="mt-10 text-center">
+      <div className="flex justify-center mt-10 ">
         <Button
           name="Create your server"
           onClick={toCreateSite}
-          className={'h-10 px-6 py-2 rounded text-whiteViolet bg-violet mb-16'}
+          className={
+            'z-50 h-10 px-6 py-2 rounded text-whiteViolet bg-violet mb-16'
+          }
         />
       </div>
     </div>
