@@ -5,7 +5,7 @@ import Title from '../components/Title';
 import CardUpdatePassword from '../components/CardUpdatePassword';
 import CardSsh from '../components/CardSsh';
 import Button from '../components/Button';
-import { postFetch } from '../controller/postFetch';
+import { deleteFetch } from '../controller/deleteFetch';
 
 export default function ProfilContent() {
   const navigate = useNavigate();
@@ -24,14 +24,19 @@ export default function ProfilContent() {
   };
 
   async function deleteUser() {
-    if ((await postFetch('/deleteuser', state)) === false) {
-      console.log('failed to connect');
+    const reponse = await deleteFetch(
+      `/api/users/${sessionStorage.getItem('pseudo')}`,
+      state,
+      sessionStorage.getItem('user'),
+    );
+    if (reponse === false) {
+      console.log(reponse);
     } else {
-      console.log('user delete');
-      sessionStorage.removeItem('user');
-      navigate('/authentication');
+      sessionStorage.removeItem(reponse.token);
+      navigate('/homepage');
     }
   }
+
   return (
     <div className="flex-col justify-between">
       <div className="flex justify-between m-4">
@@ -49,7 +54,7 @@ export default function ProfilContent() {
           <CardUpdatePassword />
         </div>
       </div>
-      <div className="flex-1 text-end mt-20 mr-10">
+      <div className="flex-1 mt-20 mr-10 text-end">
         <Button
           className={'h-10 px-6 py-2 rounded text-whiteViolet bg-red'}
           name="Delete User"

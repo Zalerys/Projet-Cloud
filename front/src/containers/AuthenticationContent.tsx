@@ -42,6 +42,7 @@ export default function AuthenticationContent() {
       setShowPopUp(true);
       // console.log(reponse);
     } else {
+      sessionStorage.setItem('pseudo', state.username)
       sessionStorage.setItem('user', reponse.token);
       navigate('/homepage');
     }
