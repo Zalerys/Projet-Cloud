@@ -3,4 +3,4 @@
 username="$1"
 dbname="$2"
 
-du -sh /var/www/html/$username/$dbname
+du -sh /home/$username/$dbname

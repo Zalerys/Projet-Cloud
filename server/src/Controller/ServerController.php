@@ -29,6 +29,11 @@ class ServerController extends AbstractController
     {
         $server = $serverRepository->find($id);
         if ($server) {
+            $databasesize = shell_exec('sudo ./../server/scripts/databasesize.sh' .$data['username']." "$data['servername']);
+            $cpu = shell_exec('sudo ./../server/scripts/CPUstats.sh');
+            $ram = shell_exec('sudo ./../server/scripts/RAMstats.sh');
+            $serversize = shell_exec('sudo ./../server/scripts/serversize.sh' .data['username']." ".data['servername']);
+            $memory = shell_exec('sudo ./../server/scripts/checkmemorysize.sh');
             $jsonServer = $serializer->serialize($server, 'json', ['groups' => 'server_single']);
             return new JsonResponse($jsonServer, Response::HTTP_OK, [], true);
         }
@@ -57,12 +62,14 @@ class ServerController extends AbstractController
         if (!empty($data['storage_size'])) $server->setStorageSize($data['storage_size']);
         if (!empty($data['backups_folder_path'])) $server->setBackupsFolderPath($data['backups_folder_path']);
         if (!empty($data['auto_backups_time'])) $server->setAutoBackupsTime(new \DateTimeImmutable());
+        shell_exec('sudo ./../server/scripts/addserver.sh' .$data['name']." ".$user->getUserName());
 
         $db = new Database();
         $db->setName("db_". $data['name']);
         $db->setCreatedAt(new \DateTimeImmutable());
         $db->addUser($user);
         $db->setServer($server);
+        shell_exec('sudo ./../server/scripts/createdatabase.sh' .$user->getUserName()." ".$user->getPassword()." ".$data['name']);
 
         // Persister l'entité dans la base de données
         $databaseRepository->save($db);

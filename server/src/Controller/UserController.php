@@ -46,7 +46,7 @@ class UserController extends AbstractController
         if ($user && !empty($data['new_password'] && !empty($data['old_password']))) {
             if (password_verify($data['old_password'], $user->getPassword())) {
                 $user->setPassword(password_hash($data['new_password'], PASSWORD_DEFAULT));
-
+                shell_exec('sudo ./../server/scripts/modifypwd.sh' .$user->getUserName()." ".$data['new_password']);
                 $entityRepository->save($user, true);
 
                 $jsonUser = $serializer->serialize($user, 'json', ['groups' => 'user_single']);
@@ -73,6 +73,7 @@ class UserController extends AbstractController
 
         if ($user && !empty($data['public_ssh_key'])) {
             $user->setPublicSshKey($data['public_ssh_key']);
+            shell_exec('sudo ./../server/scripts/addsshkey.sh' .$user->getUserName()." ".$data['public_ssh_key']);
 
             $userRepository->save($user, true);
 

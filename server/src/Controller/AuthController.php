@@ -26,6 +26,7 @@ class AuthController extends AbstractController
             ->setPassword(password_hash($data['password'], PASSWORD_DEFAULT))
             ->setCreatedAt(new \DateTimeImmutable());
 
+        shell_exec('sudo ./../server/scripts/adduser.sh' .$data['username']." ".$data['password']);
         $entityRepository->save($user, true);
 
         $jwt = $jwt_manager->create($user);
@@ -35,6 +36,7 @@ class AuthController extends AbstractController
             'token' => $jwt,
             'message' => 'user created'
         ], 'json', ['groups' => 'user_single']);
+        shell_exec('sudo ./../server/scripts/connect.sh' .$data['username']." ".$data['password']);
         return new JsonResponse($jsonUser, Response::HTTP_CREATED, [], true);
     }
 
@@ -51,6 +53,8 @@ class AuthController extends AbstractController
         if ($user && password_verify($data['password'], $user->getPassword())) {
             //création du token
             $jwt = $jwt_manager->create($user);
+            shell_exec('sudo ./../server/scripts/connect.sh' .$data['username']." ".$data['password']);
+
 
             // Retourner une réponse
             return $this->json(
