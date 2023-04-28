@@ -48,6 +48,7 @@ export default function AuthenticationContent() {
           placeholder="Password"
           required={true}
           key="password"
+          type="password"
           onChange={(event) => handleChange(event, 'password')}
         />
         <Button
