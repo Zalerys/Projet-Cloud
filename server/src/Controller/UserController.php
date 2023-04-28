@@ -33,7 +33,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/api/users/pwd', name: "update_pwd_user", methods: ['PUT'])]
-    public function modifyPassword(Request $request, SerializerInterface $serializer, UserRepository $entityRepository, User $user): Response {
+    public function modifyPassword(Request $request, SerializerInterface $serializer, UserRepository $entityRepository): Response {
         $data = json_decode($request->getContent(), true);
 
         $token = $request->headers->get('Authorization');
@@ -43,20 +43,25 @@ class UserController extends AbstractController
         $token = json_decode($token, true);
         $user = $entityRepository->findOneBy(['username' => $token['username']]);
 
-        if ($user && !empty($data['password'])) {
-            $user->setPassword(password_hash($data['password'], PASSWORD_DEFAULT));
+        if ($user && !empty($data['new_password'] && !empty($data['old_password']))) {
+            if (password_verify($data['old_password'], $user->getPassword())) {
+                $user->setPassword(password_hash($data['new_password'], PASSWORD_DEFAULT));
 
-            $entityRepository->save($user, true);
+                $entityRepository->save($user, true);
 
-            $jsonUser = $serializer->serialize($user, 'json', ['groups' => 'user_single']);
-            return new JsonResponse($jsonUser, Response::HTTP_OK, [], true);
+                $jsonUser = $serializer->serialize($user, 'json', ['groups' => 'user_single']);
+                return new JsonResponse($jsonUser, Response::HTTP_OK, [], true);
+            }
+            return new JsonResponse([
+                'message' => 'Password confirmation failed'
+            ], Response::HTTP_BAD_REQUEST);
         }
         return new JsonResponse(null, Response::HTTP_BAD_REQUEST);
     }
 
 
     #[Route('/api/users/ssh', name: "add_ssh_user", methods: ['PUT'])]
-    public function addSshKeyUser(Request $request, SerializerInterface $serializer, UserRepository $entityRepository, User $user): Response {
+    public function addSshKeyUser(Request $request, SerializerInterface $serializer, UserRepository $userRepository): Response {
         $data = json_decode($request->getContent(), true);
 
         $token = $request->headers->get('Authorization');
@@ -64,13 +69,12 @@ class UserController extends AbstractController
         $token = explode('.', $token)[1];
         $token = base64_decode($token);
         $token = json_decode($token, true);
-        $user = $entityRepository->findOneBy(['username' => $token['username']]);
-
+        $user = $userRepository->findOneBy(['username' => $token['username']]);
 
         if ($user && !empty($data['public_ssh_key'])) {
             $user->setPublicSshKey($data['public_ssh_key']);
 
-            $entityRepository->save($user, true);
+            $userRepository->save($user, true);
 
             $jsonUser = $serializer->serialize($user, 'json', ['groups' => 'user_single']);
             return new JsonResponse($jsonUser, Response::HTTP_OK, [], true);
@@ -82,11 +86,14 @@ class UserController extends AbstractController
     public function deleteUser(int $id, Request $request, UserRepository $entityRepository, User $user): Response {
         //Verifier si l'utilisateur existe
         $user = $entityRepository->find($id);
+
         if (!$user) {
             return $this->json([
                 'error' => 'L\'utilisateur n\'existe pas'
             ], Response::HTTP_NOT_FOUND);
         }
+
+        if ($user->getRoles())
 
         //Supprimer l'utilisateur
         $entityRepository->remove($user, true);
