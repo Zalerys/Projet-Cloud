@@ -1,0 +1,328 @@
+{
+	"info": {
+		"_postman_id": "77c373d4-3d1a-4e39-846a-3fe7bc82eb9b",
+		"name": "WEB 2 Solution Cloud TP1 - Groupe 17",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "13799222"
+	},
+	"item": [
+		{
+			"name": "/api",
+			"item": [
+				{
+					"name": "/users",
+					"item": [
+						{
+							"name": "/users",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/users",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"users"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/users/{id}",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/users/1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"users",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/users/pwd",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"old_password\": \"Password2\",\n    \"new_password\": \"Password4\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/users/pwd",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"users",
+										"pwd"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/users/ssh",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"public_ssh_key\": \"ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDnMAp0mhAqt0tWUyF9McGEoPzIde7YZS9973K59vOrquMMu6oIAGGmTbxw+MtUQyXm99pAmyoLyUPW/gyxasLQeBQZYcehgYGoQi5Mx8SsBJIqQvdGr7DgYRMmlBScc5fLWbChskK1OIKd540YA44rLB9+mK6wV620ChdXAJB5rYlunhY24R9fhX4VWBZZWha6d30QgtPK4KByQlYNLXu+7mJwwZ5yw1VoyMtja8mUYGtbQJHPV5ldNocPrMGDGWMiWPmq1uEvjfDflZ0YdmDF3rk4ts88GnVHeSbjzB9xUL7PnCsY6IGfEsio9M3mExwutRKQMZh26A/iRKOseAdxtAXPt4XYhA3DZXL7TDkNDfuOQKHJ82eKB6ZaOckRlPFxFe68i5YFAhY5MctcXOlrYhgZ1VQcspYZ8Jve42rbguJLmB4cg6y9QgbSWdD+NBR/oeVqqwl67sxDMx/D29/mVTZkw4ANzJGvnJH8qcGPFgp9wjy6Rb7ZOuh00KVJg+c= alexandre@Alexandres-MacBook-Pro.local\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/users/ssh",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"users",
+										"ssh"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/users/{id}",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/users/1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"users",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "/servers",
+					"item": [
+						{
+							"name": "/servers",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/servers",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"servers"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/servers/{id}",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/servers/1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"servers",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/servers",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"hetic_cloud_17\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/servers",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"servers"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/servers/{id}",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/servers/1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"servers",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "/login",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"bob2\",\n    \"password\": \"Password2\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/register",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"bob2\",\n    \"email\": \"bob2@example.com\",\n    \"password\": \"Password2\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/register",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/login_check",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"bob2\",\n    \"password\": \"Password2\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE2ODI2ODMzNjcsImV4cCI6MTY4Mjc2OTc2Nywicm9sZXMiOlsiUk9MRV9VU0VSIl0sInVzZXJuYW1lIjoiYm9iMiJ9.Yp_HjPJ8kblQJwlKWr895MxsgaGBER09Z3DwEtiMI3gIuJVAUHBJOq0kiGRhdVnxx95J5t81XUnFbkcfpnwxX7r9gY9HFCLW6_rKmgEm08iQPyCMZI9ilRd91gfD64h1jfBEAmzgovwqANhf-4AXZC1qYAKa8wtHmOIqLk_CROZZ3yF89zzADGh8ZWpgNvX9sE31eAXmBQtAJUVU6pc01hcfROZGW4j46TtCSNx55Tht5snrBAJfGcdWvsAVJ6UP2NfbYs_jyCcAPsj0fYCR_JLG5LcfvxP-ByFifuvn_IVyWQIG7PW07yTZnR3egjXijOSxVfIzV0ezukgmdMwvbR6LO4BUCZrwctvRwXvwh_V2f0cHZJoVZ_vm6zqddbjjgdbR9gQk74BH1OWxJ_27xCPygARzba-vP_hZDeC1T8wvD2Dg_Er18721MQvWQpwZU2LBhfoiE5ilMoIMWogrdbc8Z4X8YdHeCwIDnt8Orwl3dlxPnCwbl7XHaxvmQWBr3nZVv62vJnvwyXs4YJqlN4JDF74BpjhB8Lt8bVZ-P_KKxhCHuQfDYin5EfBYuFnkfUTEjdj0fXgx9RgeJcoiHmtJwUL_PGgkotcsCPFYVZFg8i6xVGvv1yu7IrZiXZio4aUgHpjz7Ya-Qx8lyRKxks_30qpco6oJ8IX2kQwS2nM",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
