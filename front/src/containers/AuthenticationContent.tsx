@@ -28,7 +28,6 @@ export default function AuthenticationContent() {
     const reponse = await postFetch('/api/register', state);
     if (reponse === false) {
       console.log(reponse);
-      // setErr('Account already created or invalid');
     } else {
       sessionStorage.setItem('user', reponse.token);
       navigate('/homepage');
@@ -54,23 +53,18 @@ export default function AuthenticationContent() {
         />
         <Input
           placeholder="password"
+          type="password"
           required={true}
           key="password"
           onChange={(event) => handleChange(event, 'password')}
         />
-        {/* <Input
-          placeholder="Key ssh"
-          onChange={(event) => handleChange(event, 'key_ssh')}
-        /> */}
+
         <Button
           className={'h-10 px-6 py-2 rounded text-whiteViolet bg-violet'}
           name="Register"
           onClick={register}
         />
       </div>
-      {/* <span className="absolute mb-3 text-sm italic left-5 bottom-24 text-violet">
-        Optional
-      </span> */}
     </div>
   );
 }
