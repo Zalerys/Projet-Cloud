@@ -1,14 +1,15 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
 import Input from '../components/Input';
 import Button from '../components/Button';
 import Title from '../components/Title';
+import PopUp from '../components/PopUp';
 import { postFetch } from '../controller/postFetch';
 
 export default function AuthenticationContent() {
   const navigate = useNavigate();
   const [err, setErr] = useState<string | null>('');
+  const [showPopUp, setShowPopUp] = useState(false);
 
   const [state, setState] = useState({
     username: '',
@@ -24,10 +25,22 @@ export default function AuthenticationContent() {
     setState({ ...state, [key]: event.target.value });
   };
 
+  useEffect(() => {
+    if (showPopUp) {
+      const timeout = setTimeout(() => {
+        setShowPopUp(false);
+        setErr(null);
+      }, 3000);
+      return () => clearTimeout(timeout);
+    }
+  }, [showPopUp]);
+
   async function register() {
     const reponse = await postFetch('/api/register', state);
     if (reponse === false) {
-      console.log(reponse);
+      setErr('Registration failed');
+      setShowPopUp(true);
+      // console.log(reponse);
     } else {
       sessionStorage.setItem('user', reponse.token);
       navigate('/homepage');
@@ -65,6 +78,7 @@ export default function AuthenticationContent() {
           onClick={register}
         />
       </div>
+      {showPopUp && <PopUp message={err} delay={3000} />}
     </div>
   );
 }
