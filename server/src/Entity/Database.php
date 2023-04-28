@@ -18,7 +18,7 @@ class Database
     #[Groups(['database_single', 'database_list', 'user_single', 'server_single'])]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, unique: true)]
     #[Groups(['database_single', 'database_list', 'user_single', 'server_single'])]
     private ?string $name = null;
 
