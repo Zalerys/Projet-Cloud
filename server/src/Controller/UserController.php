@@ -33,11 +33,9 @@ class UserController extends AbstractController
     }
 
     #[Route('/api/users/pwd', name: "update_pwd_user", methods: ['PUT'])]
-    public function modifyPassword(Request $request, UserRepository $entityRepository, User $user): Response {
-        // Récupérer les données du formulaire
+    public function modifyPassword(Request $request, SerializerInterface $serializer, UserRepository $entityRepository, User $user): Response {
         $data = json_decode($request->getContent(), true);
 
-        // Récupérer l'utilisateur avec le jwt token
         $token = $request->headers->get('Authorization');
         $token = str_replace('Bearer ', '', $token);
         $token = explode('.', $token)[1];
@@ -45,15 +43,15 @@ class UserController extends AbstractController
         $token = json_decode($token, true);
         $user = $entityRepository->findOneBy(['username' => $token['username']]);
 
-        // Créer une nouvelle instance de l'entité User
-        $user->setPassword($data['password']);
-        if (!empty($data['password'])) $user->setPassword(password_hash($data['password'], PASSWORD_DEFAULT));
+        if ($user && !empty($data['password'])) {
+            $user->setPassword(password_hash($data['password'], PASSWORD_DEFAULT));
 
-        // Persister l'entité dans la base de données
-        $entityRepository->save($user, true);
+            $entityRepository->save($user, true);
 
-        // Retourner une réponse
-        return new JsonResponse(null, Response::HTTP_NO_CONTENT);
+            $jsonUser = $serializer->serialize($user, 'json', ['groups' => 'user_single']);
+            return new JsonResponse($jsonUser, Response::HTTP_OK, [], true);
+        }
+        return new JsonResponse(null, Response::HTTP_BAD_REQUEST);
     }
 
 
