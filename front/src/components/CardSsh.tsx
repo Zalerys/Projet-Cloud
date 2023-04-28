@@ -22,12 +22,6 @@ const CardSsh = () => {
       sessionStorage.getItem('user'),
     );
     console.log(reponse);
-    // if (reponse) === false
-    // ) {
-    //   console.log('error in add ssh');
-    // } else {
-    //   console.log('Add ssh');
-    // }
   }
   return (
     <div className="flex-col p-4 m-10 text-center border-2 rounded-sm felx bg-whiteViolet border-violet">
