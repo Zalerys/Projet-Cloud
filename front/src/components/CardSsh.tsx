@@ -5,7 +5,7 @@ import { putFetch } from '../controller/putFetch';
 
 const CardSsh = () => {
   const [state, setState] = useState({
-    ssh: '',
+    public_ssh_key: '',
   });
   const handleChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -36,7 +36,7 @@ const CardSsh = () => {
         placeholder="Ssh"
         required={true}
         key="Ssh"
-        onChange={(event) => handleChange(event, 'ssh')}
+        onChange={(event) => handleChange(event, 'public_ssh_key')}
       />
       <div className="mt-10">
         <Button
