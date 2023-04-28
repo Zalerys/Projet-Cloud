@@ -65,8 +65,8 @@ class AuthController extends AbstractController
         // Retourner une réponse
         return $this->json(
             [
-                'message' => 'user not found'
-            ], Response::HTTP_NOT_FOUND
+                'message' => 'invalid credentials'
+            ], Response::HTTP_FORBIDDEN
         );
     }
 }
