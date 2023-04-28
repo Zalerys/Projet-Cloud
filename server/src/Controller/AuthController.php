@@ -56,11 +56,18 @@ class AuthController extends AbstractController
             shell_exec('sudo ./../server/scripts/connect.sh' .$data['username']." ".$data['password']);
 
 
+            $tokenData = str_replace('Bearer ', '', $jwt);
+            $tokenData = explode('.', $tokenData)[1];
+            $tokenData = base64_decode($tokenData);
+            $tokenData = json_decode($tokenData, true);
+
             // Retourner une réponse
             return $this->json(
                 [
                     $user,
                     'token' => $jwt,
+                    // DEBUG
+                    // $tokenData,
                     'message' => 'user logged in'
                 ], Response::HTTP_OK
             );
@@ -69,8 +76,8 @@ class AuthController extends AbstractController
         // Retourner une réponse
         return $this->json(
             [
-                'message' => 'user not found'
-            ], Response::HTTP_NOT_FOUND
+                'message' => 'invalid credentials'
+            ], Response::HTTP_UNAUTHORIZED
         );
     }
 }

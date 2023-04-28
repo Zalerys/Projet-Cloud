@@ -1,16 +1,16 @@
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Input from '../components/Input';
 import Button from '../components/Button';
 import Title from '../components/Title';
+import PopUp from '../components/PopUp';
 import { postFetch } from '../controller/postFetch';
 
 export default function AuthenticationContent() {
   const navigate = useNavigate();
 
-  const [err, setErr] = useState<string | null>('');
-
+  const [err, setErr] = useState<string | null>(null);
+  const [showPopUp, setShowPopUp] = useState(false);
   const [state, setState] = useState({
     username: '',
     password: '',
@@ -23,13 +23,24 @@ export default function AuthenticationContent() {
     setState({ ...state, [key]: event.target.value });
   };
 
+  useEffect(() => {
+    if (showPopUp) {
+      const timeout = setTimeout(() => {
+        setShowPopUp(false);
+        setErr(null);
+      }, 3000);
+      return () => clearTimeout(timeout);
+    }
+  }, [showPopUp]);
+
   async function connect() {
     const reponse = await postFetch('/api/login', state);
     if (reponse.message === 'user logged in') {
       sessionStorage.setItem('user', reponse.token);
       navigate('/homepage');
     } else {
-      console.log('Wrong email or password');
+      setErr('Wrong email or password');
+      setShowPopUp(true);
     }
   }
 
@@ -56,6 +67,7 @@ export default function AuthenticationContent() {
           name="Login"
           onClick={connect}
         />
+        {showPopUp && <PopUp message={err} delay={3000} />}
       </div>
     </div>
   );

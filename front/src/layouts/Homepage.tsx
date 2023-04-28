@@ -13,6 +13,9 @@ interface Item {
 
 export default function Homepage() {
   const navigate = useNavigate();
+  if (CheckLog() === false) {
+    navigate('/authentication');
+  }
 
   const [items, setItems] = useState<Item[]>([]);
 
@@ -23,10 +26,6 @@ export default function Homepage() {
         sessionStorage.getItem('user'),
       );
       setItems(reponse);
-
-      if (CheckLog() === false) {
-        navigate('/authentication');
-      }
     };
 
     fetchData();
@@ -36,7 +35,7 @@ export default function Homepage() {
     <div className="relative w-full">
       <HomepageContent />
       <div className="grid gap-10 mx-16 my-12 md:grid-cols-2 lg:grid-cols-3">
-        {items.map((item) => (
+        {items?.map((item) => (
           <div key={item.id} className="z-50">
             <Card name={item.name} id={item.id} />
           </div>
