@@ -52,11 +52,18 @@ class AuthController extends AbstractController
             //création du token
             $jwt = $jwt_manager->create($user);
 
+            $tokenData = str_replace('Bearer ', '', $jwt);
+            $tokenData = explode('.', $tokenData)[1];
+            $tokenData = base64_decode($tokenData);
+            $tokenData = json_decode($tokenData, true);
+
             // Retourner une réponse
             return $this->json(
                 [
                     $user,
                     'token' => $jwt,
+                    // DEBUG
+                    // $tokenData,
                     'message' => 'user logged in'
                 ], Response::HTTP_OK
             );
@@ -66,7 +73,7 @@ class AuthController extends AbstractController
         return $this->json(
             [
                 'message' => 'invalid credentials'
-            ], Response::HTTP_FORBIDDEN
+            ], Response::HTTP_UNAUTHORIZED
         );
     }
 }
