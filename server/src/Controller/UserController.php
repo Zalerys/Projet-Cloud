@@ -56,11 +56,9 @@ class UserController extends AbstractController
 
 
     #[Route('/api/users/ssh', name: "add_ssh_user", methods: ['PUT'])]
-    public function addSshKeyUser(Request $request, UserRepository $entityRepository, User $user): Response {
-        // Récupérer les données du formulaire
+    public function addSshKeyUser(Request $request, SerializerInterface $serializer, UserRepository $entityRepository, User $user): Response {
         $data = json_decode($request->getContent(), true);
 
-        // Récupérer l'utilisateur avec le jwt token
         $token = $request->headers->get('Authorization');
         $token = str_replace('Bearer ', '', $token);
         $token = explode('.', $token)[1];
@@ -68,14 +66,16 @@ class UserController extends AbstractController
         $token = json_decode($token, true);
         $user = $entityRepository->findOneBy(['username' => $token['username']]);
 
-        // Créer une nouvelle instance de l'entité User
-        if (!empty($data['sshKey'])) $user->setPublicSshKey($data['sshKey']);
 
-        // Persister l'entité dans la base de données
-        $entityRepository->save($user, true);
+        if ($user && !empty($data['public_ssh_key'])) {
+            $user->setPublicSshKey($data['public_ssh_key']);
 
-        // Retourner une réponse
-        return new JsonResponse(null, Response::HTTP_NO_CONTENT);
+            $entityRepository->save($user, true);
+
+            $jsonUser = $serializer->serialize($user, 'json', ['groups' => 'user_single']);
+            return new JsonResponse($jsonUser, Response::HTTP_OK, [], true);
+        }
+        return new JsonResponse(null, Response::HTTP_BAD_REQUEST);
     }
 
     #[Route('/api/users/{id}', name: "delete_user", methods: ['DELETE'])]
