@@ -18,11 +18,11 @@ export default function Homepage() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await getFetch(
+      const reponse = await getFetch(
         `/api/servers`,
         sessionStorage.getItem('user'),
       );
-      setItems(response);
+      setItems(reponse);
 
       if (CheckLog() === false) {
         navigate('/authentication');
