@@ -15,7 +15,9 @@ create table server
     storage_size        double       null,
     backups_folder_path varchar(255) null,
     auto_backups_time   time         null comment '(DC2Type:time_immutable)',
-    created_at          datetime     not null comment '(DC2Type:datetime_immutable)'
+    created_at          datetime     not null comment '(DC2Type:datetime_immutable)',
+    constraint UNIQ_5A6DD5F65E237E06
+        unique (name)
 )
     collate = utf8mb4_unicode_ci;
 
@@ -26,6 +28,8 @@ create table program_db
     server_id  int          not null,
     name       varchar(255) not null,
     created_at datetime     not null comment '(DC2Type:datetime_immutable)',
+    constraint UNIQ_6275DC725E237E06
+        unique (name),
     constraint FK_6275DC721844E6B7
         foreign key (server_id) references server (id)
 )
