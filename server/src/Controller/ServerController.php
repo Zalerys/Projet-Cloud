@@ -83,7 +83,29 @@ class ServerController extends AbstractController
     }
 
     #[Route('/api/servers/{id}', name: "delete_server", methods: ['DELETE'])]
-    public function deleteServer(int $id) {
+    public function deleteServer(int $id, Request $request, SerializerInterface $serializer, ServerRepository $serverRepository) {
+        //Verifier si l'utilisateur existe
+        $server = $serverRepository->find($id);
+
+        if ($server) {
+            try {
+                $serverRepository->remove($server, true);
+
+                return $this->json([
+                    'message' => 'Delete success'
+                ], Response::HTTP_OK);
+            } catch (\Exception $e) {
+                return $this->json([
+                    'message' => 'Delete failed'
+                ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
+
+        }
+
+        //Retourner une réponse
+        return $this->json([
+            'error' => 'Server not found'
+        ], Response::HTTP_NOT_FOUND);
 
     }
 }
