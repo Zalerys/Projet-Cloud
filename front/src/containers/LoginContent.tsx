@@ -27,6 +27,7 @@ export default function AuthenticationContent() {
     const reponse = await postFetch('/api/login', state);
     if (reponse.message === 'user logged in') {
       sessionStorage.setItem('user', reponse.token);
+      sessionStorage.setItem('pseudo', state.username)
       navigate('/homepage');
     } else {
       console.log('Wrong email or password');

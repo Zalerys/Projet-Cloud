@@ -29,6 +29,7 @@ export default function AuthenticationContent() {
     if (reponse === false) {
       console.log(reponse);
     } else {
+      sessionStorage.setItem('pseudo', state.username)
       sessionStorage.setItem('user', reponse.token);
       navigate('/homepage');
     }
